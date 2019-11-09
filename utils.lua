@@ -1,7 +1,5 @@
--- кеш изображений: путь - Image
 local imageCache = {}
 
--- возвращает изображение из кеша или открывает из файла и кеширует
 local function imageFromCache(path)
     if imageCache[path] == nil then
         imageCache[path] = love.graphics.newImage(path)
@@ -9,18 +7,17 @@ local function imageFromCache(path)
     return imageCache[path]
 end
 
--- создаёт вертикальный или горизонтальный градиент
 local function gradientMesh(dir, ...)
     local isHorizontal = true
-    if dir == 'vertical' then
+    if dir == "vertical" then
         isHorizontal = false
-    elseif dir ~= 'horizontal' then
+    elseif dir ~= "horizontal" then
         error("bad argument #1 to 'gradient' (invalid value)", 2)
     end
 
-    local colorLen = select('#', ...)
+    local colorLen = select("#", ...)
     if colorLen < 2 then
-        error('color list is less than two', 2)
+        error("color list is less than two", 2)
     end
 
     local meshData = {}
@@ -42,10 +39,9 @@ local function gradientMesh(dir, ...)
         end
     end
 
-    return love.graphics.newMesh(meshData, 'strip', 'static')
+    return love.graphics.newMesh(meshData, "strip", "static")
 end
 
--- форматирует объект в строку для дебага
 local function dump(o)
     if type(o) == 'table' then
         local s = '{ '
@@ -53,14 +49,13 @@ local function dump(o)
             if type(k) ~= 'number' then k = '"'..k..'"' end
             s = s .. '['..k..'] = ' .. dump(v) .. ','
         end
-        return s .. ' }\n'
+        return s .. '}\n'
     else
         return tostring(o)
     end
  end
 
--- делает копию объекта
-local function deepcopy(orig, copies)
+ local function deepcopy(orig, copies)
     copies = copies or {}
     local orig_type = type(orig)
     local copy
@@ -81,10 +76,26 @@ local function deepcopy(orig, copies)
     return copy
 end
 
--- удаляет элемент из массива по индексу (быстрее table.remove)
 local function removeIndex(array, index)
     array[index] = array[#array]
     array[#array] = nil
+end
+
+local function triangleArea(a, b, c)
+    return math.abs(a[1]*(b[2] - c[2]) + b[1]*(c[2] - a[2]) + c[1]*(a[2] - b[2]))/2
+end
+
+local function rectArea(a, b, c, d)
+    return math.abs(a[1]*b[2] - b[1]*a[2] + b[1]*c[2] - c[1]*b[2] + c[1]*d[2] - d[1]*c[2] + d[1]*a[2] - a[1]*d[2])/2
+end
+
+local function pointInRect(a, b, c, d, m)
+    local amb = triangleArea(a, m, b)
+    local bmc = triangleArea(b, m, c)
+    local cmd = triangleArea(c, m, d)
+    local dma = triangleArea(d, m, a)
+    local abcd = rectArea(a, b, c, d)
+    return math.abs(amb + bmc + cmd + dma - abcd) <= 1e-6
 end
 
 return {
@@ -92,5 +103,6 @@ return {
     gradientMesh = gradientMesh,
     dump = dump,
     deepcopy = deepcopy,
-    removeIndex = removeIndex
+    removeIndex = removeIndex,
+    pointInRect = pointInRect
 }
