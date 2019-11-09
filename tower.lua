@@ -8,6 +8,8 @@ function Tower:new(type)
         image = Utils.imageFromCache('assets/actors/weapon_cannon_E.png')
     elseif type == 3 then
         image = Utils.imageFromCache('assets/actors/weapon_ballista_E.png')
+    elseif type == 4 then 
+        image = Utils.imageFromCache('assets/actors/sell.png')
     end
 
     local o = {

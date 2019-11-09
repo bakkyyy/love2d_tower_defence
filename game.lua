@@ -191,16 +191,21 @@ function Game:draw_tools(ww, wh)
     local tools = {
         {
             image = Utils.imageFromCache('assets/actors/weapon_crystals_N.png'),
+            min = {minx, wh - 20*4 - 96*3 - 96},
+            max = {maxx, wh - 20*4 - 96*3}
+        },
+        {
+            image = Utils.imageFromCache('assets/actors/weapon_cannon_E.png'),
             min = {minx, wh - 20*3 - 96*2 - 96},
             max = {maxx, wh - 20*3 - 96*2}
         },
         {
-            image = Utils.imageFromCache('assets/actors/weapon_cannon_E.png'),
+            image = Utils.imageFromCache('assets/actors/weapon_ballista_E.png'),
             min = {minx, wh - 20*2 - 96 - 78},
             max = {maxx, wh - 20*2 - 96}
         },
         {
-            image = Utils.imageFromCache('assets/actors/weapon_ballista_E.png'),
+            image = Utils.imageFromCache('assets/actors/sell.png'),
             min = {minx, wh - 20 - 78},
             max = {maxx, wh - 20}
         }
