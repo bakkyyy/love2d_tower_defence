@@ -13,7 +13,14 @@ function love.load()
     math.randomseed(os.time())
     font = love.graphics.newFont("DoublePixel.ttf", 64)
     love.window.setFullscreen(true)
+    love.keyboard.setKeyRepeat(false)
     screens.changeScreen('menu', screens)
+end
+
+function love.keypressed(key, scancode, isrepeat)
+    if key == 'escape' then
+        screens.game.paused = not screens.game.paused
+    end
 end
 
 function love.update(dt)

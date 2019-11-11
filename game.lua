@@ -6,20 +6,41 @@ local Utils = require 'utils'
 
 local Map = Winter
 
-local Game = { screens = {}, tiles = Map.tiles, ufos = {}, towers = {}, time_since_start = 0, wave = 1, left_to_spawn = 0, last_spawn_at = 0, wave_part = 0, selectedTower = 0}
-local score = 2
+local Game = {
+    screens = {},
+    tiles = Map.tiles,
+    ufos = {},
+    towers = {},
+    time_now = 0,
+    wave = 1,
+    left_to_spawn = 0,
+    last_spawn_at = 0,
+    wave_part = 0,
+    selectedTower = 0,
+    paused = false
+}
 
 function Game:load(screens)
     self.screens = screens
     mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
+
+    -- for i = 1,#self.tiles do
+    --     for j, tile in ipairs(self.tiles[i]) do
+    --         if tile.towerable then
+    --             local t = Tower:new(2, {j, i})
+    --             table.insert(self.towers, t)
+    --             tile.tower = t
+    --         end
+    --     end
+    -- end
 end
 
 function Game:move_ufos(dt)
     for i, ufo in ipairs(self.ufos) do
         -- local ufo = self.ufos[i]
         local path = Map.paths[(i % #Map.paths) + 1]
-        if ufo.pos_index >= #path then
-            score = score - 1
+        if ufo.pos_index >= #path or ufo.isDead then
+            -- score = score - 1
             Utils.removeIndex(self.ufos, i)
             -- if #self.ufos == 0 then
             --     self.wave = self.wave + 1
@@ -59,20 +80,62 @@ function Game:move_ufos(dt)
     end
 end
 
+function Game:towers_shot(ww, wh)
+    for i,t in ipairs(self.towers) do
+        if t.target ~= nil then
+            local dx = t.target.pos[1] - t.pos[1]
+            local dy = t.target.pos[2] - t.pos[2]
+            if t.target.isDead or dx*dx+dy*dy > t.attackRange*t.attackRange then
+                t.target = nil
+            end
+        end
+
+        for j, c in ipairs(self.ufos) do
+            if t.target == nil then
+                local dx = c.pos[1] - t.pos[1]
+                local dy = c.pos[2] - t.pos[2]
+                if dx*dx+dy*dy <= t.attackRange*t.attackRange then
+                    t.target = c
+                end
+            end
+        end
+
+        if t.target ~= nil then
+            if self.time_now - t.lastShotAt > t.attackSpeed then
+                t.lastShotAt = self.time_now
+                local u = ww/2
+            local v = (wh - #self.tiles*65) / 2
+
+            local tx = u + (t.pos[1] - t.pos[2]) * 65
+            local ty = v + (t.pos[1] + t.pos[2] - 2) * 32
+            local cx = u + (t.target.pos[1] - t.target.pos[2]) * 65
+            local cy = v + (t.target.pos[1] + t.target.pos[2] - 2) * 32
+
+            love.graphics.line(tx, ty, cx, cy)
+            t:shot()
+            end
+        end
+    end
+end
+
 function Game:update(dt)
-    self.time_since_start = self.time_since_start + dt
+    if self.paused then
+        return
+    end
+
+    self.time_now = self.time_now + dt
 
     for i,part in ipairs(Map.waves[self.wave]) do
-        if part.time_offset < self.time_since_start then
+        if part.time_offset < self.time_now then
             if i > self.wave_part then
                 self.wave_part = i
                 self.left_to_spawn = part.count
                 self.last_spawn_at = 0
             end
 
-            if self.time_since_start - self.last_spawn_at > 2 and self.left_to_spawn > 0 then
+            if self.time_now - self.last_spawn_at > 5 and self.left_to_spawn > 0 then
                 table.insert(self.ufos, Enemy:new('enemy_ufoPurple_E.png', Map.paths[1][1], math.random(part.speed_range[1], part.speed_range[2])))
-                self.last_spawn_at = self.time_since_start
+                self.last_spawn_at = self.time_now
                 self.left_to_spawn = self.left_to_spawn - 1
             end
         end
@@ -140,7 +203,9 @@ function Game:draw_tiles(ww, wh, x, y)
         love.graphics.setColor({0.8, 0.8, 0.8})
 
         if self.selectedTower > 0 and love.mouse.isDown(1) then
-            tile.tower = Tower:new(self.selectedTower)
+            local t = Tower:new(self.selectedTower, {x, y})
+            table.insert(self.towers, t)
+            tile.tower = t
             self.selectedTower = 0
         end
     end
@@ -179,7 +244,7 @@ function Game:draw_ufos(ww, wh)
 end
 
 function Game:draw_tools(ww, wh)
-    local seconds_since_start = math.floor(self.time_since_start)
+    local seconds_since_start = math.floor(self.time_now)
     local minutes = math.floor(seconds_since_start / 60)
     local seconds = seconds_since_start % 60
     love.graphics.print(string.format('%02d:%02d', minutes, seconds), font, ww - 150, 30)
@@ -214,7 +279,7 @@ function Game:draw_tools(ww, wh)
     for i, t in ipairs(tools) do
         if t.min[1] <= mx and mx <= t.max[1] and t.min[2] <= my and my <= t.max[2] then
             love.graphics.setColor({1, 1, 1, 0.5})
-            if love.mouse.isDown(1) then
+            if love.mouse.isDown(1) and not self.paused then
                 self.selectedTower = i
             end
         end
@@ -237,7 +302,10 @@ function Game:draw(ww, wh)
     self:reset_tiles()
 
     self:draw_ufos(ww, wh)
+    self:towers_shot(ww, wh)
     self:draw_tools(ww, wh)
+
+    love.graphics.print(Utils.dump(love.graphics.getSystemLimits()), 10, 10)
 end
 
 return Game

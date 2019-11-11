@@ -1,27 +1,83 @@
 local Utils = require 'utils'
 
 local Tower = {}
+local towers = {
+    {
+        image = {
+            'assets/actors/weapon_crystals_N.png',
+            'assets/actors/weapon_crystals_N.png',
+            'assets/actors/weapon_crystals_N.png',
+            'assets/actors/weapon_crystals_N.png'
+        }
+    },
+    {
+        image = {
+            'assets/actors/weapon_cannon_E.png',
+            'assets/actors/weapon_cannon_N.png',
+            'assets/actors/weapon_cannon_W.png',
+            'assets/actors/weapon_cannon_S.png'
+        }
+    },
+    {
+        image = {
+            'assets/actors/weapon_ballista_E.png',
+            'assets/actors/weapon_ballista_N.png',
+            'assets/actors/weapon_ballista_W.png',
+            'assets/actors/weapon_ballista_S.png'
+        }
+    },
+    {
+        image = {
+            'assets/actors/sell.png',
+            'assets/actors/sell.png',
+            'assets/actors/sell.png',
+            'assets/actors/sell.png'
+        }
+    }
+}
 
-function Tower:new(type)
-    local image = Utils.imageFromCache('assets/actors/weapon_crystals_N.png')
-    if type == 2 then
-        image = Utils.imageFromCache('assets/actors/weapon_cannon_E.png')
-    elseif type == 3 then
-        image = Utils.imageFromCache('assets/actors/weapon_ballista_E.png')
-    elseif type == 4 then 
-        image = Utils.imageFromCache('assets/actors/sell.png')
-    end
-
+function Tower:new(type, pos)
     local o = {
-        image = image,
-        attackRange = nil,
-        attackSpeed = nil,
+        image = Utils.imageFromCache(towers[type].image[1]),
+        attackRange = 2,
+        attackSpeed = 1, -- интервал в секундах
         target = nil,
-        lastShotAt = nil,
-        damage = nil
+        lastShotAt = 0,
+        damage = 50,
+        pos = pos,
+        type = type,
+        rotation = 1,
+        deg = 0
     }
     self.__index = self
     return setmetatable(o, self)
+end
+
+function Tower:turn()
+    local angle = math.deg(math.atan2(self.target.pos[1] - self.pos[1], self.target.pos[2] - self.pos[2]))
+    local rotation = self.rotation
+
+    if angle < 0 then
+        angle = angle + 360
+    end
+    self.deg = angle
+
+    if 45 < angle and angle < 135 then
+        rotation = 1
+    elseif 135 < angle and angle < 225 then
+        rotation = 2
+    elseif 225 < angle and angle < 315 then
+        rotation = 3
+    else
+        rotation = 4
+    end
+    self.rotation = rotation
+    self.image = Utils.imageFromCache(towers[self.type].image[self.rotation])
+end
+
+function Tower:shot()
+    self:turn()
+    self.target:takeDamage(self.damage)
 end
 
 return Tower
