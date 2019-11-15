@@ -217,8 +217,14 @@ function Game:draw_enemies(ww, wh)
 end
 
 function Game:draw_tools(ww, wh)
-    love.graphics.print(tostring(self.lives), font, 40, 30)
-    love.graphics.print(tostring(self.money), font, 150, 30)
+    local livesString = tostring(self.lives)
+    local livesWidth = font:getWidth(livesString)
+    love.graphics.draw(Utils.imageFromCache('assets/hp.png'), 40, 30)
+    love.graphics.print(livesString, font, 40 + 40 + 20, 25)
+
+    local moneyString = tostring(self.money)
+    love.graphics.draw(Utils.imageFromCache('assets/money.png'), 40 + 40 + 20 + livesWidth + 20, 30)
+    love.graphics.print(moneyString, font, 40 + 40 + 20 + livesWidth + 40 + 20 + 20, 25)
 
     love.graphics.print('Волна ' .. tostring(self.wave) .. '-' .. tostring(self.subwave), font, 40, wh - 40 - 64)
 
