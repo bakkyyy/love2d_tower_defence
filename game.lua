@@ -11,11 +11,11 @@ local Game = {
     tiles = Map.tiles,
     enemies = {},
     towers = {},
-    time_now = 0,
+    timeNow = 0,
     wave = 1,
-    left_to_spawn = 0,
-    last_spawn_at = 0,
-    wave_part = 0,
+    subwave = 0,
+    enemiesToSpawn = 0,
+    spawnedAt = 0,
     selectedTower = 0,
     paused = false,
     lives = 20,
@@ -37,85 +37,41 @@ function Game:load(screens)
     -- end
 end
 
-function Game:move_enemies(dt)
-    for i, enemy in pairs(self.enemies) do
-        -- local ufo = self.enemies[i]
-        local path = Map.paths[(i % #Map.paths) + 1]
-        if enemy.pos_index >= #path or enemy.isDead then
-            -- score = score - 1
-            Utils.removeByKey(self.enemies, i)
-            self.money = self.money + enemy.reward
-            -- if #self.enemies == 0 then
-            --     self.wave = self.wave + 1
-            -- end
-        else
-            local prev_pos = path[enemy.pos_index]
-            local next_pos = path[enemy.pos_index+1]
-            local reached = false
-
-            if prev_pos[1] < next_pos[1] then
-                enemy.pos[1] = enemy.pos[1] + enemy.speed*dt
-                if enemy.pos[1] > next_pos[1] then
-                    reached = true
-                end
-            elseif prev_pos[1] > next_pos[1] then
-                enemy.pos[1] = enemy.pos[1] - enemy.speed*dt
-                if enemy.pos[1] < next_pos[1] then
-                    reached = true
-                end
-            elseif prev_pos[2] < next_pos[2] then
-                enemy.pos[2] = enemy.pos[2] + enemy.speed*dt
-                if enemy.pos[2] > next_pos[2] then
-                    reached = true
-                end
-            elseif prev_pos[2] > next_pos[2] then
-                enemy.pos[2] = enemy.pos[2] - enemy.speed*dt
-                if enemy.pos[2] < next_pos[2] then
-                    reached = true
-                end
-            end
-
-            if reached then
-                enemy.pos_index = enemy.pos_index + 1
-                enemy.pos = Utils.deepcopy(next_pos)
-            end
-        end
-    end
-end
-
 function Game:towers_shot(ww, wh)
-    for i,t in pairs(self.towers) do
-        if t.target ~= nil then
-            local dx = t.target.pos[1] - t.pos[1]
-            local dy = t.target.pos[2] - t.pos[2]
-            if t.target.isDead or dx*dx+dy*dy > t.attackRange*t.attackRange then
-                t.target = nil
+    for i,tower in pairs(self.towers) do
+        if tower.target ~= nil then
+            local dx = tower.target.position[1] - tower.position[1]
+            local dy = tower.target.position[2] - tower.position[2]
+            local ar = tower:getAttackRange()
+            if tower.target.isDead or dx*dx+dy*dy > ar*ar then
+                tower.target = nil
             end
         end
 
-        for j, c in pairs(self.enemies) do
-            if t.target == nil then
-                local dx = c.pos[1] - t.pos[1]
-                local dy = c.pos[2] - t.pos[2]
-                if dx*dx+dy*dy <= t.attackRange*t.attackRange then
-                    t.target = c
+        if tower.target == nil then
+            for j, enemy in pairs(self.enemies) do
+                local dx = enemy.position[1] - tower.position[1]
+                local dy = enemy.position[2] - tower.position[2]
+                local ar = tower:getAttackRange()
+                if dx*dx+dy*dy <= ar*ar then
+                    tower.target = enemy
                 end
             end
         end
 
-        if t.target ~= nil then
-            if self.time_now - t.lastShotAt > t.attackSpeed then
-                t.lastShotAt = self.time_now
+        if tower.target ~= nil then
+            if self.timeNow - tower.lastShotAt > tower:getAttackSpeed() then
+                tower.lastShotAt = self.timeNow
                 local u = ww/2
             local v = (wh - #self.tiles*65) / 2
 
-            local tx = u + (t.pos[1] - t.pos[2]) * 65
-            local ty = v + (t.pos[1] + t.pos[2] - 2) * 32
-            local cx = u + (t.target.pos[1] - t.target.pos[2]) * 65
-            local cy = v + (t.target.pos[1] + t.target.pos[2] - 2) * 32
+            local tx = u + (tower.position[1] - tower.position[2]) * 65
+            local ty = v + (tower.position[1] + tower.position[2] - 2) * 32
+            local cx = u + (tower.target.position[1] - tower.target.position[2]) * 65
+            local cy = v + (tower.target.position[1] + tower.target.position[2] - 2) * 32
 
             love.graphics.line(tx, ty, cx, cy)
-            t:shot()
+            tower:shot()
             end
         end
     end
@@ -126,20 +82,22 @@ function Game:update(dt)
         return
     end
 
-    self.time_now = self.time_now + dt
+    self.timeNow = self.timeNow + dt
 
     for i,part in pairs(Map.waves[self.wave]) do
-        if part.time_offset < self.time_now then
-            if i > self.wave_part then
-                self.wave_part = i
-                self.left_to_spawn = part.count
-                self.last_spawn_at = 0
+        if part.time_offset < self.timeNow then
+            if i > self.subwave then
+                self.subwave = i
+                self.enemiesToSpawn = part.count
+                self.spawnedAt = 0
             end
 
-            if self.time_now - self.last_spawn_at > 3 and self.left_to_spawn > 0 then
-                table.insert(self.enemies, Enemy:new('enemy_ufoPurple_E.png', Map.paths[1][1], math.random(part.speed_range[1], part.speed_range[2]), part.reward))
-                self.last_spawn_at = self.time_now
-                self.left_to_spawn = self.left_to_spawn - 1
+            if self.timeNow - self.spawnedAt > 3 and self.enemiesToSpawn > 0 then
+                local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
+                local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(part.speed_range[1], part.speed_range[2]), part.reward)
+                table.insert(self.enemies, e.id, e)
+                self.spawnedAt = self.timeNow
+                self.enemiesToSpawn = self.enemiesToSpawn - 1
             end
         end
     end
@@ -148,7 +106,9 @@ function Game:update(dt)
         self.selectedTower = 0
     end
 
-    Game:move_enemies(dt)
+    for i, enemy in pairs(self.enemies) do
+        enemy:update(self, dt)
+    end
 end
 
 function Game:draw_tiles(ww, wh, x, y)
@@ -223,9 +183,9 @@ function Game:draw_tiles(ww, wh, x, y)
         end
     end
 
-    love.graphics.draw(Utils.imageFromCache(tile.image), u, v)
+    love.graphics.draw(tile.image, u, v)
     if tile.tower ~= nil then
-        love.graphics.draw(tile.tower.image, u, v - 16)
+        love.graphics.draw(tile.tower:getImage(), u, v - 16)
     end
     love.graphics.setColor({1, 1, 1, 1})
 
@@ -246,13 +206,13 @@ end
 
 function Game:draw_enemies(ww, wh)
     for i, enemy in pairs(self.enemies) do
-        local sx = enemy.pos[1]
-        local sy = enemy.pos[2]
+        local sx = enemy.position[1]
+        local sy = enemy.position[2]
         local u = ww/2
         local v = (wh - #self.tiles*65) / 2
         u = u + (sx - sy) * 65 - 130
         v = v + (sx + sy - 2) * 32 - 141
-        love.graphics.draw(Utils.imageFromCache(enemy.image), u, v)
+        love.graphics.draw(enemy.image, u, v)
     end
 end
 
@@ -261,7 +221,7 @@ function Game:draw_tools(ww, wh)
 
     love.graphics.print(tostring(self.money), font, 100, 30)
 
-    local seconds_since_start = math.floor(self.time_now)
+    local seconds_since_start = math.floor(self.timeNow)
     local minutes = math.floor(seconds_since_start / 60)
     local seconds = seconds_since_start % 60
     love.graphics.print(string.format('%02d:%02d', minutes, seconds), font, ww - 150, 30)
@@ -296,18 +256,18 @@ function Game:draw_tools(ww, wh)
         max = {maxx, wh - 20*2 - 96}
     })
 
-    for i, t in pairs(tools) do
-        if t.price > self.money then
+    for i, tool in pairs(tools) do
+        if tool.price > self.money then
             love.graphics.setColor({1, 1, 1, 0.5})
         end
 
-        if t.min[1] <= mx and mx <= t.max[1] and t.min[2] <= my and my <= t.max[2] then
+        if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
             love.graphics.setColor({1, 1, 1})
-            if love.mouse.isDown(1) and not self.paused and t.price <= self.money then
+            if love.mouse.isDown(1) and not self.paused and tool.price <= self.money then
                 self.selectedTower = i
             end
         end
-        love.graphics.draw(t.image, minx - 74, t.max[2] - 218)
+        love.graphics.draw(tool.image, minx - 74, tool.max[2] - 218)
         love.graphics.setColor({1, 1, 1})
     end
 
@@ -328,6 +288,7 @@ function Game:draw(ww, wh)
     self:draw_enemies(ww, wh)
     self:towers_shot(ww, wh)
     self:draw_tools(ww, wh)
+    love.graphics.print(Utils.dump(self.enemies), 10, 10)
 end
 
 return Game

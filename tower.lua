@@ -1,63 +1,68 @@
 local Utils = require 'utils'
 
-local tId = 1
-local Tower = {}
 towerTypes = {
     {
-        image = {
+        images = {
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png'
         },
-        price = 150
+        price = 150,
+        attackRange = 2,
+        attackSpeed = 1,
+        damage = 50
     },
     {
-        image = {
+        images = {
             'assets/actors/weapon_cannon_E.png',
             'assets/actors/weapon_cannon_N.png',
             'assets/actors/weapon_cannon_W.png',
             'assets/actors/weapon_cannon_S.png'
         },
-        price = 50
+        price = 50,
+        attackRange = 2,
+        attackSpeed = 1,
+        damage = 50
     },
     {
-        image = {
+        images = {
             'assets/actors/weapon_ballista_E.png',
             'assets/actors/weapon_ballista_N.png',
             'assets/actors/weapon_ballista_W.png',
             'assets/actors/weapon_ballista_S.png'
         },
-        price = 20
+        price = 20,
+        attackRange = 2,
+        attackSpeed = 1,
+        damage = 50
     }
 }
 
-function Tower:new(type, pos)
+local uniqueId = 1
+local Tower = {}
+
+function Tower:new(type, position)
     local o = {
-        id = tId,
-        image = Utils.imageFromCache(towerTypes[type].image[1]),
-        attackRange = 2,
-        attackSpeed = 1, -- интервал в секундах
+        id = uniqueId,
+        data = towerTypes[type],
         target = nil,
         lastShotAt = 0,
-        damage = 50,
-        pos = pos,
-        type = type,
+        position = position,
         rotation = 1
     }
-    tId = tId + 1
+    uniqueId = uniqueId + 1
     self.__index = self
     return setmetatable(o, self)
 end
 
 function Tower:turn()
-    local angle = math.deg(math.atan2(self.target.pos[1] - self.pos[1], self.target.pos[2] - self.pos[2]))
+    local angle = math.deg(math.atan2(self.target.position[1] - self.position[1], self.target.position[2] - self.position[2]))
     local rotation = self.rotation
 
     if angle < 0 then
         angle = angle + 360
     end
-    self.deg = angle
 
     if 45 < angle and angle < 135 then
         rotation = 1
@@ -68,13 +73,33 @@ function Tower:turn()
     else
         rotation = 4
     end
+
     self.rotation = rotation
-    self.image = Utils.imageFromCache(towerTypes[self.type].image[self.rotation])
+end
+
+function Tower:getImage()
+    return Utils.imageFromCache(self.data.images[self.rotation])
+end
+
+function Tower:getAttackRange()
+    return self.data.attackRange
+end
+
+function Tower:getAttackSpeed()
+    return self.data.attackSpeed
+end
+
+function Tower:getDamage()
+    return self.data.damage
+end
+
+function Tower:getRefund()
+    return 4*self.data.price/5
 end
 
 function Tower:shot()
     self:turn()
-    self.target:takeDamage(self.damage)
+    self.target:takeDamage(self:getDamage())
 end
 
 return Tower
