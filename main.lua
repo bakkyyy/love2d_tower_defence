@@ -11,7 +11,10 @@ end
 
 function love.load()
     math.randomseed(os.time())
-    font = love.graphics.newFont("DoublePixel.ttf", 64)
+
+    font = love.graphics.newFont('DoublePixel.ttf', 64)
+    font20 = love.graphics.newFont('DoublePixel.ttf', 20)
+
     love.window.setFullscreen(true)
     love.keyboard.setKeyRepeat(false)
     screens.changeScreen('menu', screens)

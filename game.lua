@@ -217,9 +217,10 @@ function Game:draw_enemies(ww, wh)
 end
 
 function Game:draw_tools(ww, wh)
-    love.graphics.print(tostring(self.lives), font, 20, 30)
+    love.graphics.print(tostring(self.lives), font, 40, 30)
+    love.graphics.print(tostring(self.money), font, 150, 30)
 
-    love.graphics.print(tostring(self.money), font, 100, 30)
+    love.graphics.print('Волна ' .. tostring(self.wave) .. '-' .. tostring(self.subwave), font, 40, wh - 40 - 64)
 
     local seconds_since_start = math.floor(self.timeNow)
     local minutes = math.floor(seconds_since_start / 60)
@@ -227,33 +228,36 @@ function Game:draw_tools(ww, wh)
     love.graphics.print(string.format('%02d:%02d', minutes, seconds), font, ww - 150, 30)
 
     local mx, my = love.mouse.getPosition()
-    local minx = ww - 132
-    local maxx = ww - 20
+    local toolOffset = 20
+    local toolSize = 112
+    local maxx = ww - 40
+    local miny = wh - 20 - 112
+    local maxy = wh - 20
 
     local tools = {}
     table.insert(tools, -1, {
         image = Utils.imageFromCache('assets/actors/sell.png'),
         price = 0,
-        min = {minx, wh - 20 - 78},
-        max = {maxx, wh - 20}
+        min = {maxx - toolSize, miny},
+        max = {maxx, maxy}
     })
     table.insert(tools, 1, {
         image = Utils.imageFromCache('assets/actors/weapon_crystals_N.png'),
         price = towerTypes[1].price,
-        min = {minx, wh - 20*4 - 96*3 - 96},
-        max = {maxx, wh - 20*4 - 96*3}
+        min = {maxx - toolSize*4 - toolOffset*3, miny},
+        max = {maxx - toolSize*3 - toolOffset*3, maxy}
     })
     table.insert(tools, 2, {
         image = Utils.imageFromCache('assets/actors/weapon_cannon_E.png'),
         price = towerTypes[2].price,
-        min = {minx, wh - 20*3 - 96*2 - 96},
-        max = {maxx, wh - 20*3 - 96*2}
+        min = {maxx - toolSize*3 - toolOffset*2, miny},
+        max = {maxx - toolSize*2 - toolOffset*2, maxy}
     })
     table.insert(tools, 3, {
         image = Utils.imageFromCache('assets/actors/weapon_ballista_E.png'),
         price = towerTypes[3].price,
-        min = {minx, wh - 20*2 - 96 - 78},
-        max = {maxx, wh - 20*2 - 96}
+        min = {maxx - toolSize*2 - toolOffset, miny},
+        max = {maxx - toolSize - toolOffset, maxy}
     })
 
     for i, tool in pairs(tools) do
@@ -261,14 +265,25 @@ function Game:draw_tools(ww, wh)
             love.graphics.setColor({1, 1, 1, 0.5})
         end
 
+        local scale = 0.8
         if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
+            scale = 1
             love.graphics.setColor({1, 1, 1})
             if love.mouse.isDown(1) and not self.paused and tool.price <= self.money then
                 self.selectedTower = i
             end
         end
-        love.graphics.draw(tool.image, minx - 74, tool.max[2] - 218)
+        love.graphics.draw(tool.image, tool.min[1] + 56, tool.max[2] - 56, 0, scale, scale, 130, 180)
         love.graphics.setColor({1, 1, 1})
+
+        if tool.price > 0 then
+            love.graphics.setColor({0.996078, 0.929412, 0.239216})
+            local cx = font20:getWidth(tostring(tool.price)) / 2
+            love.graphics.print(tostring(tool.price), font20, tool.min[1] + 56, tool.max[2]-15, 0, 1, 1, cx)
+            love.graphics.setColor({1, 1, 1})
+        end
+
+        -- love.graphics.rectangle('line', tool.min[1], tool.min[2], tool.max[1] - tool.min[1], tool.max[1] - tool.min[1])
     end
 
     if self.selectedTower ~= 0 then
@@ -288,7 +303,7 @@ function Game:draw(ww, wh)
     self:draw_enemies(ww, wh)
     self:towers_shot(ww, wh)
     self:draw_tools(ww, wh)
-    love.graphics.print(Utils.dump(self.enemies), 10, 10)
+    -- love.graphics.print(Utils.dump(self.enemies), 10, 10)
 end
 
 return Game

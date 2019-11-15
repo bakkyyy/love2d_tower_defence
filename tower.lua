@@ -11,7 +11,7 @@ towerTypes = {
         price = 150,
         attackRange = 2,
         attackSpeed = 1,
-        damage = 50
+        damage = 150
     },
     {
         images = {
@@ -22,8 +22,8 @@ towerTypes = {
         },
         price = 50,
         attackRange = 2,
-        attackSpeed = 1,
-        damage = 50
+        attackSpeed = 2,
+        damage = 200
     },
     {
         images = {
@@ -34,8 +34,8 @@ towerTypes = {
         },
         price = 20,
         attackRange = 2,
-        attackSpeed = 1,
-        damage = 50
+        attackSpeed = 0.5,
+        damage = 25
     }
 }
 
