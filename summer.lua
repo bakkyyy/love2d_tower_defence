@@ -179,17 +179,20 @@ return {
             {
                 time_offset = 5,
                 count = 10,
-                speed_range = {2, 2}
+                speed_range = {2, 2},
+                reward = 5
             },
             {
                 time_offset = 25,
                 count = 20,
-                speed_range = {1, 1.125}
+                speed_range = {1, 1.125},
+                reward = 10
             },
             {
                 time_offset = 100,
                 count = 50,
-                speed_range = {1.25, 1.5}
+                speed_range = {1.25, 1.5},
+                reward = 10
             }
         }
     }

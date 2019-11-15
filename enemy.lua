@@ -2,14 +2,15 @@ local Utils = require 'utils'
 
 local Enemy = {}
 
-function Enemy:new(image, pos, speed)
+function Enemy:new(image, pos, speed, reward)
     local o = {
         image = 'assets/actors/' .. image,
         pos_index = 1,
         pos = Utils.deepcopy(pos),
         speed = speed,
-        health = 1000,
-        isDead = false
+        health = 100,
+        isDead = false,
+        reward = reward
     }
     self.__index = self
     return setmetatable(o, self)

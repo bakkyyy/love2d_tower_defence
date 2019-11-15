@@ -76,9 +76,8 @@ local function dump(o)
     return copy
 end
 
-local function removeIndex(array, index)
-    array[index] = array[#array]
-    array[#array] = nil
+local function removeByKey(array, key)
+    array[key] = nil
 end
 
 local function triangleArea(a, b, c)
@@ -103,6 +102,6 @@ return {
     gradientMesh = gradientMesh,
     dump = dump,
     deepcopy = deepcopy,
-    removeIndex = removeIndex,
+    removeByKey = removeByKey,
     pointInRect = pointInRect
 }

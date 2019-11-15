@@ -1,14 +1,16 @@
 local Utils = require 'utils'
 
+local tId = 1
 local Tower = {}
-local towers = {
+towerTypes = {
     {
         image = {
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png'
-        }
+        },
+        price = 150
     },
     {
         image = {
@@ -16,7 +18,8 @@ local towers = {
             'assets/actors/weapon_cannon_N.png',
             'assets/actors/weapon_cannon_W.png',
             'assets/actors/weapon_cannon_S.png'
-        }
+        },
+        price = 50
     },
     {
         image = {
@@ -24,21 +27,15 @@ local towers = {
             'assets/actors/weapon_ballista_N.png',
             'assets/actors/weapon_ballista_W.png',
             'assets/actors/weapon_ballista_S.png'
-        }
-    },
-    {
-        image = {
-            'assets/actors/sell.png',
-            'assets/actors/sell.png',
-            'assets/actors/sell.png',
-            'assets/actors/sell.png'
-        }
+        },
+        price = 20
     }
 }
 
 function Tower:new(type, pos)
     local o = {
-        image = Utils.imageFromCache(towers[type].image[1]),
+        id = tId,
+        image = Utils.imageFromCache(towerTypes[type].image[1]),
         attackRange = 2,
         attackSpeed = 1, -- интервал в секундах
         target = nil,
@@ -46,9 +43,9 @@ function Tower:new(type, pos)
         damage = 50,
         pos = pos,
         type = type,
-        rotation = 1,
-        deg = 0
+        rotation = 1
     }
+    tId = tId + 1
     self.__index = self
     return setmetatable(o, self)
 end
@@ -72,7 +69,7 @@ function Tower:turn()
         rotation = 4
     end
     self.rotation = rotation
-    self.image = Utils.imageFromCache(towers[self.type].image[self.rotation])
+    self.image = Utils.imageFromCache(towerTypes[self.type].image[self.rotation])
 end
 
 function Tower:shot()
