@@ -18,6 +18,8 @@ local Game = {
     spawnedAt = 0,
     selectedTower = 0,
     paused = false,
+    win = false,
+    lose = false,
     lives = 20,
     money = 48
 }
@@ -78,23 +80,23 @@ function Game:towers_shot(ww, wh)
 end
 
 function Game:update(dt)
-    if self.paused then
+    if self.paused or self.win or self.lose then
         return
     end
 
     self.timeNow = self.timeNow + dt
 
-    for i,part in pairs(Map.waves[self.wave]) do
-        if part.time_offset < self.timeNow then
+    for i,subwave in pairs(Map.waves[self.wave]) do
+        if subwave.time_offset < self.timeNow then
             if i > self.subwave then
                 self.subwave = i
-                self.enemiesToSpawn = part.count
+                self.enemiesToSpawn = subwave.count
                 self.spawnedAt = 0
             end
 
             if self.timeNow - self.spawnedAt > part.spawnInterval and self.enemiesToSpawn > 0 then
                 local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
-                local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(part.speed_range[1], part.speed_range[2]), part.reward)
+                local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(subwave.speed_range[1], subwave.speed_range[2]), subwave.reward)
                 table.insert(self.enemies, e.id, e)
                 self.spawnedAt = self.timeNow
                 self.enemiesToSpawn = self.enemiesToSpawn - 1
@@ -108,6 +110,14 @@ function Game:update(dt)
 
     for i, enemy in pairs(self.enemies) do
         enemy:update(self, dt)
+    end
+
+    if self.lives == 0 then
+        self.lose = true
+    end
+
+    if self.wave == #Map.waves and self.subwave == #Map.waves[self.wave] and #self.enemies == 0 and #self.enemiesToSpawn == 0 then
+        self.win = true
     end
 end
 
@@ -300,6 +310,26 @@ function Game:draw_tools(ww, wh)
     end
 end
 
+function Game:draw_win(ww, wh)
+    love.graphics.print('Вы победили!', font, ww/2, wh/2)
+end
+
+function Game:draw_lose(ww, wh)
+    love.graphics.print('Вы проиграли!', font, ww/2, wh/2)
+end
+
+function Game:draw_results(ww, wh)
+    love.graphics.setColor({0, 0, 0, 0.8})
+    love.graphics.rectangle('fill', 0, 0, ww, wh)
+
+    love.graphics.setColor({1, 1, 1})
+    if self.win then
+        self:draw_win(ww, wh)
+    elseif self.lose then
+        self:draw_lose(ww, wh)
+    end
+end
+
 function Game:draw(ww, wh)
     love.graphics.draw(mesh, 0, 0, 0, ww, hh)
 
@@ -310,6 +340,10 @@ function Game:draw(ww, wh)
     self:towers_shot(ww, wh)
     self:draw_tools(ww, wh)
     -- love.graphics.print(Utils.dump(self.enemies), 10, 10)
+
+    if self.win or self.lose then
+        self:draw_results(ww, wh)
+    end
 end
 
 return Game
