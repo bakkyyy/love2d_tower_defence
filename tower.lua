@@ -8,10 +8,10 @@ towerTypes = {
             'assets/actors/weapon_crystals_N.png',
             'assets/actors/weapon_crystals_N.png'
         },
-        price = 150,
+        price = 60,
         attackRange = 2,
         attackSpeed = 1,
-        damage = 150
+        damage = 5
     },
     {
         images = {
@@ -20,10 +20,10 @@ towerTypes = {
             'assets/actors/weapon_cannon_W.png',
             'assets/actors/weapon_cannon_S.png'
         },
-        price = 50,
+        price = 80,
         attackRange = 2,
-        attackSpeed = 2,
-        damage = 200
+        attackSpeed = 3,
+        damage = 25
     },
     {
         images = {
@@ -32,10 +32,10 @@ towerTypes = {
             'assets/actors/weapon_ballista_W.png',
             'assets/actors/weapon_ballista_S.png'
         },
-        price = 20,
+        price = 48,
         attackRange = 2,
-        attackSpeed = 0.5,
-        damage = 25
+        attackSpeed = 1.25,
+        damage = 7.5
     }
 }
 

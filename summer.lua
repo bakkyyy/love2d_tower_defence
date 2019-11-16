@@ -178,21 +178,24 @@ return {
         {
             {
                 time_offset = 5,
-                count = 10,
+                count = 15,
                 speed_range = {2, 2},
-                reward = 5
+                reward = 5,
+                spawnInterval = 1
             },
             {
                 time_offset = 25,
-                count = 20,
+                count = 25,
                 speed_range = {1, 1.125},
-                reward = 10
+                reward = 10,
+                spawnInterval = 5
             },
             {
                 time_offset = 100,
                 count = 50,
                 speed_range = {1.25, 1.5},
-                reward = 10
+                reward = 10,
+                spawnInterval = 5
             }
         }
     }

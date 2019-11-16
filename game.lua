@@ -19,7 +19,7 @@ local Game = {
     selectedTower = 0,
     paused = false,
     lives = 20,
-    money = 100
+    money = 48
 }
 
 function Game:load(screens)
@@ -92,7 +92,7 @@ function Game:update(dt)
                 self.spawnedAt = 0
             end
 
-            if self.timeNow - self.spawnedAt > 3 and self.enemiesToSpawn > 0 then
+            if self.timeNow - self.spawnedAt > part.spawnInterval and self.enemiesToSpawn > 0 then
                 local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
                 local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(part.speed_range[1], part.speed_range[2]), part.reward)
                 table.insert(self.enemies, e.id, e)

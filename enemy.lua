@@ -11,7 +11,7 @@ function Enemy:new(image, path, speed, reward)
         pathIndex = 1,
         position = Utils.deepcopy(path[1]),
         speed = speed,
-        health = 100,
+        health = 6,
         isDead = false,
         reward = reward
     }
