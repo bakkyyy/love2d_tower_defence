@@ -94,7 +94,7 @@ function Game:update(dt)
                 self.spawnedAt = 0
             end
 
-            if self.timeNow - self.spawnedAt > part.spawnInterval and self.enemiesToSpawn > 0 then
+            if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
                 local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
                 local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(subwave.speed_range[1], subwave.speed_range[2]), subwave.reward)
                 table.insert(self.enemies, e.id, e)
@@ -116,7 +116,7 @@ function Game:update(dt)
         self.lose = true
     end
 
-    if self.wave == #Map.waves and self.subwave == #Map.waves[self.wave] and #self.enemies == 0 and #self.enemiesToSpawn == 0 then
+    if self.wave == #Map.waves and self.subwave == #Map.waves[self.wave] and #self.enemies == 0 and self.enemiesToSpawn == 0 then
         self.win = true
     end
 end
@@ -311,11 +311,13 @@ function Game:draw_tools(ww, wh)
 end
 
 function Game:draw_win(ww, wh)
-    love.graphics.print('Вы победили!', font, ww/2, wh/2)
+    image = Utils.imageFromCache('assets/win.png')
+    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, 0.5*image:getWidth(), 0.5*image:getHeight())
 end
 
 function Game:draw_lose(ww, wh)
-    love.graphics.print('Вы проиграли!', font, ww/2, wh/2)
+    image = Utils.imageFromCache('assets/lose.png')
+    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, 0.5*image:getWidth(), 0.5*image:getHeight())
 end
 
 function Game:draw_results(ww, wh)
