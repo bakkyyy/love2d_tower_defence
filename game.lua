@@ -6,6 +6,11 @@ local Utils = require 'utils'
 
 local Map = Summer
 
+GAME_STATE_PLAYING = 1
+GAME_STATE_WIN = 2
+GAME_STATE_LOSE = 4
+GAME_STATE_PAUSED = 8
+
 local Game = {
     screens = {},
     tiles = Map.tiles,
@@ -197,7 +202,7 @@ function Game:draw_tiles(ww, wh, x, y)
     if tile.tower ~= nil then
         love.graphics.draw(tile.tower:getImage(), u, v - 16)
     end
-    love.graphics.setColor({1, 1, 1, 1})
+    love.graphics.setColor({1, 1, 1})
 
     for i = tile.start[1],tile.stop[1] do
         for j = tile.start[2],tile.stop[2] do
@@ -285,7 +290,7 @@ function Game:draw_tools(ww, wh)
         if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
             scale = 1
             love.graphics.setColor({1, 1, 1})
-            if love.mouse.isDown(1) and not self.paused and tool.price <= self.money then
+            if love.mouse.isDown(1) and not self.paused and not self.win and not self.lose and tool.price <= self.money then
                 self.selectedTower = i
             end
         end
@@ -311,17 +316,17 @@ function Game:draw_tools(ww, wh)
 end
 
 function Game:draw_win(ww, wh)
-    image = Utils.imageFromCache('assets/win.png')
-    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, 0.5*image:getWidth(), 0.5*image:getHeight())
+    local image = Utils.imageFromCache('assets/win.png')
+    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
 function Game:draw_lose(ww, wh)
-    image = Utils.imageFromCache('assets/lose.png')
-    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, 0.5*image:getWidth(), 0.5*image:getHeight())
+    local image = Utils.imageFromCache('assets/lose.png')
+    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
 function Game:draw_results(ww, wh)
-    love.graphics.setColor({0, 0, 0, 0.8})
+    love.graphics.setColor({0, 0, 0, 0.7})
     love.graphics.rectangle('fill', 0, 0, ww, wh)
 
     love.graphics.setColor({1, 1, 1})
