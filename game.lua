@@ -17,6 +17,7 @@ local Game = {
     enemies = {},
     towers = {},
     timeNow = 0,
+    timeLastSpawn = 0,
     wave = 1,
     subwave = 0,
     enemiesToSpawn = 0,
@@ -91,22 +92,31 @@ function Game:update(dt)
 
     self.timeNow = self.timeNow + dt
 
-    for i,subwave in pairs(Map.waves[self.wave]) do
-        if subwave.time_offset < self.timeNow then
-            if i > self.subwave then
-                self.subwave = i
-                self.enemiesToSpawn = subwave.count
-                self.spawnedAt = 0
-            end
+    local wave = Map.waves[self.wave]
+    local subwave = wave[self.subwave]
 
-            if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
-                local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
-                local e = Enemy:new('enemy_ufoPurple_E.png', Map.paths[whichPath], math.random(subwave.speed_range[1], subwave.speed_range[2]), subwave.reward)
-                table.insert(self.enemies, e.id, e)
-                self.spawnedAt = self.timeNow
-                self.enemiesToSpawn = self.enemiesToSpawn - 1
-            end
+    if self.enemiesToSpawn == 0 then
+        if self.subwave <= #wave then
+            self.subwave = self.subwave + 1
+            self.enemiesToSpawn = wave[self.subwave].count
+        elseif self.wave <= #Map.waves then
+            self.wave = self.wave + 1
+            self.timeSinceWaveChange = 0
         end
+    end
+
+    subwave = wave[self.subwave]
+
+    if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
+        local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
+        local e = Enemy:new(Map.paths[whichPath], subwave.speed, subwave.reward)
+        table.insert(self.enemies, e.id, e)
+        self.spawnedAt = self.timeNow
+        self.enemiesToSpawn = self.enemiesToSpawn - 1
+    end
+
+    if self.enemiesToSpawn == 0 then
+        self.timeLastSpawn = self.timeNow
     end
 
     if love.mouse.isDown(2) then
@@ -121,7 +131,7 @@ function Game:update(dt)
         self.lose = true
     end
 
-    if self.wave == #Map.waves and self.subwave == #Map.waves[self.wave] and #self.enemies == 0 and self.enemiesToSpawn == 0 then
+    if self.wave == #Map.waves and self.subwave == #wave and #self.enemies == 0 and self.enemiesToSpawn == 0 then
         self.win = true
     end
 end
@@ -221,13 +231,14 @@ end
 
 function Game:draw_enemies(ww, wh)
     for i, enemy in pairs(self.enemies) do
+        local image = enemy:getImage()
         local sx = enemy.position[1]
         local sy = enemy.position[2]
         local u = ww/2
         local v = (wh - #self.tiles*65) / 2
-        u = u + (sx - sy) * 65 - 130
-        v = v + (sx + sy - 2) * 32 - 141
-        love.graphics.draw(enemy.image, u, v)
+        u = u + (sx - sy) * 65 - image:getWidth()/2
+        v = v + (sx + sy - 2) * 32 - 21
+        love.graphics.draw(enemy:getImage(), u, v)
     end
 end
 
@@ -241,7 +252,7 @@ function Game:draw_tools(ww, wh)
     love.graphics.draw(Utils.imageFromCache('assets/money.png'), 40 + 40 + 20 + livesWidth + 20, 30)
     love.graphics.print(moneyString, font, 40 + 40 + 20 + livesWidth + 40 + 20 + 20, 25)
 
-    love.graphics.print('Волна ' .. tostring(self.wave) .. '-' .. tostring(self.subwave), font, 40, wh - 40 - 64)
+    love.graphics.print('Волна ' .. tostring(self.wave) .. '/' .. tostring(#Map.waves), font, 40, wh - 40 - 64)
 
     local seconds_since_start = math.floor(self.timeNow)
     local minutes = math.floor(seconds_since_start / 60)

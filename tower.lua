@@ -11,7 +11,7 @@ towerTypes = {
         price = 60,
         attackRange = 2,
         attackSpeed = 1,
-        damage = 5
+        damage = 1
     },
     {
         images = {
@@ -49,7 +49,8 @@ function Tower:new(type, position)
         target = nil,
         lastShotAt = 0,
         position = position,
-        rotation = 1
+        rotation = 1,
+        type = type
     }
     uniqueId = uniqueId + 1
     self.__index = self
@@ -100,6 +101,9 @@ end
 function Tower:shot()
     self:turn()
     self.target:takeDamage(self:getDamage())
+    if self.type == 1 then
+        self.target:froze()
+    end
 end
 
 return Tower
