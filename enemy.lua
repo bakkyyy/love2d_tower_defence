@@ -3,8 +3,6 @@ local Utils = require 'utils'
 local uniqueId = 1
 local Enemy = {}
 
-
-
 function Enemy:new(path, speed, reward)
     local o = {
         id = uniqueId,
@@ -40,7 +38,7 @@ function Enemy:new(path, speed, reward)
                 'assets/actors/animation/6_enemies_1_run_018.png',
                 'assets/actors/animation/6_enemies_1_run_019.png'}
     }
-    
+
     uniqueId = uniqueId + 1
     self.__index = self
     return setmetatable(o, self)

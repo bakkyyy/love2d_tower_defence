@@ -100,10 +100,6 @@ end
 
 function Tower:shot()
     self:turn()
-    self.target:takeDamage(self:getDamage())
-    if self.type == 1 then
-        self.target:froze()
-    end
 end
 
 return Tower
