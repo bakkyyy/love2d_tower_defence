@@ -1,7 +1,7 @@
 local Utils = require 'utils'
 
 local bulletTypes = {
-    'assets/ball.png',
+    'assets/crystal.png',
     'assets/ball.png',
     'assets/bolt.png'
 }
@@ -34,8 +34,8 @@ function Bullet:update(state, dt)
     local dx = self.target.position[1] - self.position[1]
     local dy = self.target.position[2] - self.position[2]
 
-    self.position[1] = self.position[1] + 15*dx*dt
-    self.position[2] = self.position[2] + 15*dy*dt
+    self.position[1] = self.position[1] + 10*dx*dt
+    self.position[2] = self.position[2] + 10*dy*dt
 
     if dx*dx+dy*dy < 0.5 then
         self.target:takeDamage(self.tower:getDamage())
