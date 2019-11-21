@@ -34,10 +34,10 @@ function Bullet:update(state, dt)
     local dx = self.target.position[1] - self.position[1]
     local dy = self.target.position[2] - self.position[2]
 
-    self.position[1] = self.position[1] + 3*math.cos(self.rotation)*dt
-    self.position[2] = self.position[2] + 3*math.sin(self.rotation)*dt
+    self.position[1] = self.position[1] + 15*dx*dt
+    self.position[2] = self.position[2] + 15*dy*dt
 
-    if dx*dx+dy*dy < 0.1 then
+    if dx*dx+dy*dy < 0.5 then
         self.target:takeDamage(self.tower:getDamage())
         if self.tower.type == 1 then
             self.target:froze()

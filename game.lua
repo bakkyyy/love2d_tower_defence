@@ -29,7 +29,7 @@ local Game = {
     win = false,
     lose = false,
     lives = 20,
-    money = 148
+    money = 48
 }
 
 function Game:load(screens)
