@@ -97,11 +97,18 @@ local function pointInRect(a, b, c, d, m)
     return math.abs(amb + bmc + cmd + dma - abcd) <= 1e-6
 end
 
+local function tableSize(t)
+    local s = 0
+    for _ in pairs(t) do s = s + 1 end
+    return s
+end
+
 return {
     imageFromCache = imageFromCache,
     gradientMesh = gradientMesh,
     dump = dump,
     deepcopy = deepcopy,
     removeByKey = removeByKey,
-    pointInRect = pointInRect
+    pointInRect = pointInRect,
+    tableSize = tableSize   
 }
