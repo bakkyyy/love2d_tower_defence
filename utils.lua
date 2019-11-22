@@ -97,11 +97,22 @@ local function pointInRect(a, b, c, d, m)
     return math.abs(amb + bmc + cmd + dma - abcd) <= 1e-6
 end
 
+function clamp(x, a, b)
+    if x < a then
+        return a
+    elseif x > b then
+        return b
+    else
+        return x
+    end
+end
+
 return {
     imageFromCache = imageFromCache,
     gradientMesh = gradientMesh,
     dump = dump,
     deepcopy = deepcopy,
     removeByKey = removeByKey,
-    pointInRect = pointInRect
+    pointInRect = pointInRect,
+    clamp = clamp
 }

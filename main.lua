@@ -1,7 +1,8 @@
 local screens = {
     _current = nil,
     menu = require 'menu',
-    game = require 'game'
+    game = require 'game',
+    settings = require 'settings'
 }
 
 screens.changeScreen = function(name, ...)
@@ -14,6 +15,7 @@ function love.load()
 
     font = love.graphics.newFont('DoublePixel.ttf', 64)
     font20 = love.graphics.newFont('DoublePixel.ttf', 20)
+    font56 = love.graphics.newFont('DoublePixel.ttf', 56)
 
     love.window.setFullscreen(true)
     love.keyboard.setKeyRepeat(false)
