@@ -2,6 +2,7 @@ local Summer = require 'summer'
 local Winter = require 'winter'
 local Enemy = require 'enemy'
 local Tower = require 'tower'
+local Bullet = require 'bullet'
 local Utils = require 'utils'
 
 local Map = Summer
@@ -16,6 +17,7 @@ local Game = {
     tiles = Map.tiles,
     enemies = {},
     towers = {},
+    bullets = {},
     timeNow = 0,
     timeLastSpawn = 0,
     wave = 1,
@@ -70,18 +72,21 @@ function Game:towers_shot(ww, wh)
         if tower.target ~= nil then
             if self.timeNow - tower.lastShotAt > tower:getAttackSpeed() then
                 tower.lastShotAt = self.timeNow
-                local u = ww/2
-            local v = (wh - #self.tiles*65) / 2
-
-            local tx = u + (tower.position[1] - tower.position[2]) * 65
-            local ty = v + (tower.position[1] + tower.position[2] - 2) * 32
-            local cx = u + (tower.target.position[1] - tower.target.position[2]) * 65
-            local cy = v + (tower.target.position[1] + tower.target.position[2] - 2) * 32
-
-            love.graphics.line(tx, ty, cx, cy)
-            tower:shot()
+                local b = Bullet:new(tower, tower.target)
+                table.insert(self.bullets, b.id, b)
+                tower:shot()
             end
         end
+    end
+
+    for i,bullet in pairs(self.bullets) do
+        local u = ww/2
+        local v = (wh - #self.tiles*65) / 2
+
+        local bx = u + (bullet.position[1] - bullet.position[2]) * 65
+        local by = v + (bullet.position[1] + bullet.position[2] - 2) * 32
+
+        love.graphics.draw(bullet:getImage(), bx, by, bullet.rotation)
     end
 end
 
@@ -121,6 +126,10 @@ function Game:update(dt)
 
     if love.mouse.isDown(2) then
         self.selectedTower = 0
+    end
+
+    for i, bullet in pairs(self.bullets) do
+        bullet:update(self, dt)
     end
 
     for i, enemy in pairs(self.enemies) do
@@ -203,6 +212,7 @@ function Game:draw_tiles(ww, wh, x, y)
                 self.selectedTower = 0
             elseif self.selectedTower < 0 and tile.tower ~= nil then
                 Utils.removeByKey(self.towers, tile.tower.id)
+                self.money = self.money + tile.tower:getRefund()
                 tile.tower = nil
             end
         end
