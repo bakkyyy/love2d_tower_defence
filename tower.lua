@@ -95,7 +95,7 @@ function Tower:getDamage()
 end
 
 function Tower:getRefund()
-    return 4*self.data.price/5
+    return self.data.price/2
 end
 
 function Tower:shot()
