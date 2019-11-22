@@ -30,7 +30,7 @@ local Game = {
     lose = false,
     lives = 20,
     money = 48,
-    night = true
+    night = false
 }
 
 function Game:load(screens)
@@ -116,7 +116,7 @@ function Game:update(dt)
 
     if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
         local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
-        local e = Enemy:new(subwave.type,Map.paths[whichPath], subwave.speed, subwave.reward)
+        local e = Enemy:new(subwave.type, Map.paths[whichPath], subwave.speed, subwave.reward, subwave.health)
         table.insert(self.enemies, e.id, e)
         self.spawnedAt = self.timeNow
         self.enemiesToSpawn = self.enemiesToSpawn - 1
@@ -202,8 +202,15 @@ function Game:draw_tiles(ww, wh, x, y)
     local c = { u+130, v+141 }
     local d = { u+65, v+173 }
 
+    local color = {1, 1, 1}
+    local colorHover = {0.7, 0.7, 0.7}
+    if self.night then
+        color = {0.7, 0.7, 0.7}
+        colorHover = {1, 1, 1}
+    end
+
     if tile.towerable and Utils.pointInRect(a, b, c, d, m) then
-        love.graphics.setColor({0.8, 0.8, 0.8})
+        love.graphics.setColor(colorHover)
 
         if self.selectedTower ~= 0 and love.mouse.isDown(1) then
             if self.selectedTower > 0 and tile.tower == nil then
@@ -224,7 +231,7 @@ function Game:draw_tiles(ww, wh, x, y)
     if tile.tower ~= nil then
         love.graphics.draw(tile.tower:getImage(), u, v - 16)
     end
-    love.graphics.setColor({1, 1, 1})
+    love.graphics.setColor(color)
 
     for i = tile.start[1],tile.stop[1] do
         for j = tile.start[2],tile.stop[2] do
@@ -312,7 +319,6 @@ function Game:draw_tools(ww, wh)
         local scale = 0.8
         if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
             scale = 1
-            love.graphics.setColor({1, 1, 1})
             if love.mouse.isDown(1) and not self.paused and not self.win and not self.lose and tool.price <= self.money then
                 self.selectedTower = i
             end
@@ -373,12 +379,7 @@ function Game:draw(ww, wh)
     self:draw_enemies(ww, wh)
     self:towers_shot(ww, wh)
 
-    if self.night then
-        love.graphics.setColor({0, 0, 0, 0.5})
-        love.graphics.rectangle('fill', 0, 0, ww, wh)
-        love.graphics.setColor({1,1,1})
-    end
-
+    love.graphics.setColor({1, 1, 1})
     self:draw_tools(ww, wh)
 
     if self.win or self.lose then

@@ -179,27 +179,27 @@ return {
         {
             {
                 type = 1,
-                time_offset = 5,
                 count = 10,
                 speed = 2,
                 reward = 5,
-                spawnInterval = 5
+                health = 6,
+                spawnInterval = 1
             },
             {
                 type = 2,
-                time_offset = 25,
                 count = 20,
                 speed = 1,
                 reward = 10,
-                spawnInterval = 5
+                health = 6,
+                spawnInterval = 1
             },
             {
                 type = 3,
-                time_offset = 100,
                 count = 50,
                 speed = 1.5,
                 reward = 10,
-                spawnInterval = 5
+                health = 6,
+                spawnInterval = 1
             }
         }
     }
