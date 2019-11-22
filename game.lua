@@ -29,12 +29,14 @@ local Game = {
     win = false,
     lose = false,
     lives = 20,
-    money = 48
+    money = 48,
+    night = true
 }
 
 function Game:load(screens)
     self.screens = screens
     mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
+    darkmesh = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
 
     -- for i = 1,#self.tiles do
     --     for j, tile in ipairs(self.tiles[i]) do
@@ -359,15 +361,25 @@ function Game:draw_results(ww, wh)
 end
 
 function Game:draw(ww, wh)
-    love.graphics.draw(mesh, 0, 0, 0, ww, hh)
+    if self.night then
+        love.graphics.draw(darkmesh, 0, 0, 0, ww, hh)
+    else
+        love.graphics.draw(mesh, 0, 0, 0, ww, hh)
+    end
 
     self:draw_tiles(ww, wh, #self.tiles, #self.tiles)
     self:reset_tiles()
 
     self:draw_enemies(ww, wh)
     self:towers_shot(ww, wh)
+
+    if self.night then
+        love.graphics.setColor({0, 0, 0, 0.5})
+        love.graphics.rectangle('fill', 0, 0, ww, wh)
+        love.graphics.setColor({1,1,1})
+    end
+
     self:draw_tools(ww, wh)
-    -- love.graphics.print(Utils.dump(self.enemies), 10, 10)
 
     if self.win or self.lose then
         self:draw_results(ww, wh)
