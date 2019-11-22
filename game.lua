@@ -96,19 +96,22 @@ function Game:update(dt)
     if self.paused or self.win or self.lose then
         return
     end
-
+    
     self.timeNow = self.timeNow + dt
 
     local wave = Map.waves[self.wave]
     local subwave = wave[self.subwave]
 
     if self.enemiesToSpawn == 0 then
-        if self.subwave <= #wave then
+        if self.subwave < #wave then
             self.subwave = self.subwave + 1
             self.enemiesToSpawn = wave[self.subwave].count
-        elseif self.wave <= #Map.waves then
+        elseif self.wave < #Map.waves then
             self.wave = self.wave + 1
+            wave = Map.waves[self.wave]
             self.timeSinceWaveChange = 0
+            self.subwave = 1
+            self.enemiesToSpawn = wave[self.subwave].count
         end
     end
 
@@ -142,7 +145,7 @@ function Game:update(dt)
         self.lose = true
     end
 
-    if self.wave == #Map.waves and self.subwave == #wave and #self.enemies == 0 and self.enemiesToSpawn == 0 then
+    if self.wave == #Map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
         self.win = true
     end
 end

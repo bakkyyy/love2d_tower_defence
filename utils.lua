@@ -97,7 +97,7 @@ local function pointInRect(a, b, c, d, m)
     return math.abs(amb + bmc + cmd + dma - abcd) <= 1e-6
 end
 
-function clamp(x, a, b)
+local function clamp(x, a, b)
     if x < a then
         return a
     elseif x > b then
@@ -107,6 +107,12 @@ function clamp(x, a, b)
     end
 end
 
+local function tableSize(t)
+    local s = 0
+    for _ in pairs(t) do s = s + 1 end
+    return s
+end
+
 return {
     imageFromCache = imageFromCache,
     gradientMesh = gradientMesh,
@@ -114,5 +120,6 @@ return {
     deepcopy = deepcopy,
     removeByKey = removeByKey,
     pointInRect = pointInRect,
-    clamp = clamp
+    clamp = clamp,
+    tableSize = tableSize   
 }
