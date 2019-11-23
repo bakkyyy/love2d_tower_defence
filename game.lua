@@ -13,7 +13,6 @@ GAME_STATE_LOSE = 4
 GAME_STATE_PAUSED = 8
 
 local Game = {
-    screens = {},
     tiles = Map.tiles,
     enemies = {},
     towers = {},
@@ -33,8 +32,7 @@ local Game = {
     night = false
 }
 
-function Game:load(screens)
-    self.screens = screens
+function Game:load()
     mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
     darkmesh = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
 
@@ -96,7 +94,7 @@ function Game:update(dt)
     if self.paused or self.win or self.lose then
         return
     end
-    
+
     self.timeNow = self.timeNow + dt
 
     local wave = Map.waves[self.wave]
@@ -129,7 +127,7 @@ function Game:update(dt)
         self.timeLastSpawn = self.timeNow
     end
 
-    if love.mouse.isDown(2) then
+    if App.isMouseDown(2) then
         self.selectedTower = 0
     end
 
@@ -215,7 +213,7 @@ function Game:draw_tiles(ww, wh, x, y)
     if tile.towerable and Utils.pointInRect(a, b, c, d, m) then
         love.graphics.setColor(colorHover)
 
-        if self.selectedTower ~= 0 and love.mouse.isDown(1) then
+        if self.selectedTower ~= 0 and App.isMouseDown(1) then
             if self.selectedTower > 0 and tile.tower == nil then
                 local t = Tower:new(self.selectedTower, {x, y})
                 table.insert(self.towers, t.id, t)
@@ -322,7 +320,7 @@ function Game:draw_tools(ww, wh)
         local scale = 0.8
         if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
             scale = 1
-            if love.mouse.isDown(1) and not self.paused and not self.win and not self.lose and tool.price <= self.money then
+            if App.isMouseDown(1) and not self.paused and not self.win and not self.lose and tool.price <= self.money then
                 self.selectedTower = i
             end
         end

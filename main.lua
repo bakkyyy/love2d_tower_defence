@@ -1,13 +1,20 @@
-local screens = {
+App = {
     _current = nil,
     menu = require 'menu',
     game = require 'game',
-    settings = require 'settings'
+    settings = require 'settings',
+    mouseDown = {}
 }
 
-screens.changeScreen = function(name, ...)
-    screens._current = screens[name]
-    screens._current:load(...)
+App.changeScreen = function(name, ...)
+    App._current = App[name]
+    App._current:load(...)
+end
+
+App.isMouseDown = function(i)
+    local f = App.mouseDown[i]
+    App.mouseDown[i] = false
+    return f
 end
 
 function love.load()
@@ -19,21 +26,29 @@ function love.load()
 
     love.window.setFullscreen(true)
     love.keyboard.setKeyRepeat(false)
-    screens.changeScreen('menu', screens)
+    App.changeScreen('menu')
+end
+
+function love.mousepressed(x, y, button, istouch, presses)
+    App.mouseDown[button] = true
+end
+
+function love.mousereleased(x, y, button, istouch, presses)
+    App.mouseDown[button] = false
 end
 
 function love.keypressed(key, scancode, isrepeat)
-    if key == 'escape' then
-        screens.game.paused = not screens.game.paused
+    if key == 'escape' and App._current == App.game then
+        App.game.paused = not App.game.paused
     end
 end
 
 function love.update(dt)
-    screens._current:update(dt)
+    App._current:update(dt)
 end
 
 function love.draw()
     local ww = love.graphics.getWidth()
     local wh = love.graphics.getHeight()
-    screens._current:draw(ww, wh)
+    App._current:draw(ww, wh)
 end

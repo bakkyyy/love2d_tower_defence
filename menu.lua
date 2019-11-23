@@ -1,16 +1,15 @@
 local Utils = require 'utils'
 
-local Menu = { buttons = {}, screens = {} }
+local Menu = { buttons = {} }
 
-function Menu:load(screens)
-    self.screens = screens
+function Menu:load()
     logo = Utils.imageFromCache("assets/logo.png")
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
-        self.screens.changeScreen('game', self.screens)
+        App.changeScreen('game')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = nil })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu4.png"), fn = function()
-        self.screens.changeScreen('settings', self.screens)
+        App.changeScreen('settings')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu5.png"), fn = function()
         love.window.close()
@@ -43,7 +42,7 @@ function Menu:draw(ww, wh)
         if mouseOver then
             love.graphics.draw(btn.image, cx, 2*wh/5, 0, 1, 1, 0.5*btn.image:getWidth())
             hovered = true
-            if love.mouse.isDown(1) then
+            if App.isMouseDown(1) then
                 btn.fn()
             end
         end
@@ -54,6 +53,8 @@ function Menu:draw(ww, wh)
     if not hovered then
         love.graphics.draw(self.buttons[5].image, cx, 2*wh/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
     end
+
+    love.graphics.print(Utils.dump(App.mouseDown), 10, 10)
 end
 
 return Menu
