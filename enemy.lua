@@ -108,7 +108,6 @@ function Enemy:new(type, path, speed, reward, health)
         reward = reward,
         currentFrame = 1,
         timeSinceFrameChange = 0,
-        type = type,
         frames = enemyTypes[type]
     }
 

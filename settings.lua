@@ -1,21 +1,19 @@
 local Utils = require 'utils'
 
-local Settings = { buttons = {}, screens = {} }
+local Settings = { buttons = {} }
 
-function Settings:load(screens)
-    self.screens = screens
+function Settings:load()
     logo = Utils.imageFromCache("assets/logo.png")
     scroll = Utils.imageFromCache("assets/settings/scroll_area.png")
     mc = Utils.imageFromCache("assets/settings/scroll.png")
     es = Utils.imageFromCache("assets/settings/scroll.png")
     music = 0.5
     effects = 0.5
-    
+
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/settings/button_back2.png"), fn = function()
-        self.screens.changeScreen('menu', self.screens)
+        App.changeScreen('menu')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/settings/button_back.png"), fn = nil })
-    mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
 end
 
 function Settings:update(dt)
@@ -23,7 +21,7 @@ function Settings:update(dt)
 end
 
 function Settings:draw(ww, wh)
-    love.graphics.draw(mesh, 0, 0, 0, ww, hh)
+    love.graphics.draw(dayGradient, 0, 0, 0, ww, hh)
 
     local cx = ww / 2
     local cy = wh / 2
@@ -46,7 +44,7 @@ function Settings:draw(ww, wh)
         if mouseOver then
             love.graphics.draw(btn.image, cx, 1.55*cy, 0, 1, 1, 0.5*btn.image:getWidth())
             hovered = true
-            if love.mouse.isDown(1) then
+            if App.isMouseDown(1) then
                 btn.fn()
             end
         end
