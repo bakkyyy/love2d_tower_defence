@@ -3,6 +3,10 @@ local Utils = require 'utils'
 local Menu = { buttons = {}, screens = {} }
 
 function Menu:load(screens)
+    music = love.audio.newSource("assets/music/Main.wav")
+    music:setLooping(true)
+    music:play()
+
     self.screens = screens
     logo = Utils.imageFromCache("assets/logo.png")
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
