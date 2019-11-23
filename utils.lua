@@ -7,6 +7,15 @@ local function imageFromCache(path)
     return imageCache[path]
 end
 
+local audioCache = {}
+
+local function audioFromCache(path)
+    if audioCache[path] == nil then
+        audioCache[path] = love.audio.newSource('assets/music/' .. path, 'static')
+    end
+    return audioCache[path]:clone()
+end
+
 local function gradientMesh(dir, ...)
     local isHorizontal = true
     if dir == "vertical" then
@@ -115,6 +124,7 @@ end
 
 return {
     imageFromCache = imageFromCache,
+    audioFromCache = audioFromCache,
     gradientMesh = gradientMesh,
     dump = dump,
     deepcopy = deepcopy,

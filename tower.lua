@@ -11,7 +11,8 @@ towerTypes = {
         price = 60,
         attackRange = 2,
         attackSpeed = 1,
-        damage = 1
+        damage = 1,
+        shot = Utils.audioFromCache('Snow.mp3')
     },
     {
         images = {
@@ -23,7 +24,8 @@ towerTypes = {
         price = 80,
         attackRange = 2,
         attackSpeed = 3,
-        damage = 25
+        damage = 25,
+        shot = Utils.audioFromCache('Cannon.mp3')
     },
     {
         images = {
@@ -35,7 +37,8 @@ towerTypes = {
         price = 48,
         attackRange = 2,
         attackSpeed = 1.25,
-        damage = 7.5
+        damage = 7.5,
+        shot = Utils.audioFromCache('Arrow.mp3')
     }
 }
 
@@ -99,6 +102,7 @@ function Tower:getRefund()
 end
 
 function Tower:shot()
+    self.data.shot:play()
     self:turn()
 end
 

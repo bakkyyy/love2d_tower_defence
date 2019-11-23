@@ -33,10 +33,12 @@ local Game = {
 }
 
 function Game:load()
-
+    musicwar = Utils.audioFromCache('GoForWar.wav')
+    musicwar:setLooping(true)
+    musicwar:play()
 end
 
-function Game:towers_shot(ww, wh)
+function Game:towers_shot()
     for i,tower in pairs(self.towers) do
         if tower.target ~= nil then
             local dx = tower.target.position[1] - tower.position[1]
@@ -69,8 +71,8 @@ function Game:towers_shot(ww, wh)
     end
 
     for i,bullet in pairs(self.bullets) do
-        local u = ww/2
-        local v = (wh - #self.tiles*65) / 2
+        local u = App.width/2
+        local v = (App.height - #self.tiles*65) / 2
 
         local bx = u + (bullet.position[1] - bullet.position[2]) * 65
         local by = v + (bullet.position[1] + bullet.position[2] - 2) * 32
@@ -137,7 +139,7 @@ function Game:update(dt)
     end
 end
 
-function Game:draw_tiles(ww, wh, x, y)
+function Game:draw_tiles(mx, my, x, y)
     local tile = self.tiles[y][x]
     if tile.rendered then
         return
@@ -147,21 +149,21 @@ function Game:draw_tiles(ww, wh, x, y)
     local sy = tile.start[2]
 
     if sy > 1 then
-        self:draw_tiles(ww, wh, sx, sy-1)
+        self:draw_tiles(mx, my, sx, sy-1)
         if tile.mode == DRAW_MODE_2x2 or tile.mode == DRAW_MODE_2x1 then
-            self:draw_tiles(ww, wh, sx+1, sy-1)
+            self:draw_tiles(mx, my, sx+1, sy-1)
         end
     end
 
     if sx > 1 then
-        self:draw_tiles(ww, wh, sx-1, sy)
+        self:draw_tiles(mx, my, sx-1, sy)
         if tile.mode == DRAW_MODE_2x2 or tile.mode == DRAW_MODE_1x2 then
-            self:draw_tiles(ww, wh, sx-1, sy+1)
+            self:draw_tiles(mx, my, sx-1, sy+1)
         end
     end
 
-    local u = ww/2
-    local v = (wh - #self.tiles*65) / 2
+    local u = App.width/2
+    local v = (App.height - #self.tiles*65) / 2
 
     if tile.mode == DRAW_MODE_1x1 then
         u = u + (sx - sy) * 65 - 130
@@ -182,8 +184,6 @@ function Game:draw_tiles(ww, wh, x, y)
         u = u + (sx - sy) * 130 - 130
         v = v + (sx + sy - 4) * 65 - 111
     end
-
-    local mx, my = love.mouse.getPosition()
 
     local m = { mx, my }
     local a = { u+130, v+205 }
@@ -237,20 +237,20 @@ function Game:reset_tiles()
     end
 end
 
-function Game:draw_enemies(ww, wh)
+function Game:draw_enemies()
     for i, enemy in pairs(self.enemies) do
         local image = enemy:getImage()
         local sx = enemy.position[1]
         local sy = enemy.position[2]
-        local u = ww/2
-        local v = (wh - #self.tiles*65) / 2
+        local u = App.width/2
+        local v = (App.height - #self.tiles*65) / 2
         u = u + (sx - sy) * 65 - image:getWidth()/2
         v = v + (sx + sy - 2) * 32 - 21
         love.graphics.draw(enemy:getImage(), u, v)
     end
 end
 
-function Game:draw_tools(ww, wh)
+function Game:draw_tools(mx, my)
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor({1, 1, 1})
 
@@ -263,19 +263,18 @@ function Game:draw_tools(ww, wh)
     love.graphics.draw(Utils.imageFromCache('assets/money.png'), 40 + 40 + 20 + livesWidth + 20, 30)
     love.graphics.print(moneyString, font, 40 + 40 + 20 + livesWidth + 40 + 20 + 20, 25)
 
-    love.graphics.print('Волна ' .. tostring(self.wave) .. '/' .. tostring(#Map.waves), font, 40, wh - 40 - 64)
+    love.graphics.print('Волна ' .. tostring(self.wave) .. '/' .. tostring(#Map.waves), font, 40, App.height - 40 - 64)
 
     local seconds_since_start = math.floor(self.timeNow)
     local minutes = math.floor(seconds_since_start / 60)
     local seconds = seconds_since_start % 60
-    love.graphics.print(string.format('%02d:%02d', minutes, seconds), font, ww - 150, 30)
+    love.graphics.print(string.format('%02d:%02d', minutes, seconds), font, App.width - 150, 30)
 
-    local mx, my = love.mouse.getPosition()
     local toolOffset = 20
     local toolSize = 112
-    local maxx = ww - 40
-    local miny = wh - 20 - 112
-    local maxy = wh - 20
+    local maxx = App.width - 40
+    local miny = App.height - 20 - 112
+    local maxy = App.height - 20
 
     local tools = {}
     table.insert(tools, -1, {
@@ -338,49 +337,49 @@ function Game:draw_tools(ww, wh)
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw_win(ww, wh)
+function Game:draw_win()
     local image = Utils.imageFromCache('assets/win.png')
-    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
+    love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
-function Game:draw_lose(ww, wh)
+function Game:draw_lose()
     local image = Utils.imageFromCache('assets/lose.png')
-    love.graphics.draw(image, ww/2, wh/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
+    love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
-function Game:draw_results(ww, wh)
+function Game:draw_results()
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({0, 0, 0, 0.7})
-    love.graphics.rectangle('fill', 0, 0, ww, wh)
+    love.graphics.rectangle('fill', 0, 0, App.width, App.height)
 
     love.graphics.setColor({1, 1, 1})
     if self.win then
-        self:draw_win(ww, wh)
+        self:draw_win()
     elseif self.lose then
-        self:draw_lose(ww, wh)
+        self:draw_lose()
     end
 
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw(ww, wh)
+function Game:draw(mx, my)
     if self.night then
-        love.graphics.draw(nightGradient, 0, 0, 0, ww, hh)
+        love.graphics.draw(nightGradient, 0, 0, 0, App.width, App.height)
     else
-        love.graphics.draw(dayGradient, 0, 0, 0, ww, hh)
+        love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end
 
-    self:draw_tiles(ww, wh, #self.tiles, #self.tiles)
+    self:draw_tiles(mx, my, #self.tiles, #self.tiles)
     self:reset_tiles()
 
-    self:draw_enemies(ww, wh)
-    self:towers_shot(ww, wh)
+    self:draw_enemies()
+    self:towers_shot()
 
-    self:draw_tools(ww, wh)
+    self:draw_tools(mx, my)
 
     if self.win or self.lose then
-        self:draw_results(ww, wh)
+        self:draw_results()
     end
 end
 

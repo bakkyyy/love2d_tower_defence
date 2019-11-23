@@ -5,7 +5,9 @@ App = {
     menu = require 'menu',
     game = require 'game',
     settings = require 'settings',
-    mouseDown = {}
+    mouseDown = {},
+    width = 1920,
+    height = 1080
 }
 
 App.changeScreen = function(name, ...)
@@ -52,7 +54,15 @@ function love.update(dt)
 end
 
 function love.draw()
-    local ww = love.graphics.getWidth()
-    local wh = love.graphics.getHeight()
-    App._current:draw(ww, wh)
+    love.graphics.push()
+    local sx = love.graphics.getPixelWidth()/App.width
+    local sy = love.graphics.getPixelHeight()/App.height
+    love.graphics.scale(sx, sy)
+    local mx, my = love.mouse.getPosition()
+    App._current:draw(mx/sx, my/sy)
+    love.graphics.pop()
+end
+
+function love.quit()
+    love.audio.stop()
 end
