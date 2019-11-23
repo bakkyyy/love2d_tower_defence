@@ -15,7 +15,6 @@ function Menu:load()
         love.window.close()
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu.png"), fn = nil })
-    mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
 end
 
 function Menu:update(dt)
@@ -23,7 +22,7 @@ function Menu:update(dt)
 end
 
 function Menu:draw(ww, wh)
-    love.graphics.draw(mesh, 0, 0, 0, ww, hh)
+    love.graphics.draw(dayGradient, 0, 0, 0, ww, hh)
 
     local cx = ww / 2
     local cy = wh / 2
@@ -53,8 +52,6 @@ function Menu:draw(ww, wh)
     if not hovered then
         love.graphics.draw(self.buttons[5].image, cx, 2*wh/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
     end
-
-    love.graphics.print(Utils.dump(App.mouseDown), 10, 10)
 end
 
 return Menu

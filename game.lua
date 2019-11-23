@@ -29,22 +29,11 @@ local Game = {
     lose = false,
     lives = 20,
     money = 48,
-    night = false
+    night = true
 }
 
 function Game:load()
-    mesh = Utils.gradientMesh("vertical", {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
-    darkmesh = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
 
-    -- for i = 1,#self.tiles do
-    --     for j, tile in ipairs(self.tiles[i]) do
-    --         if tile.towerable then
-    --             local t = Tower:new(2, {j, i})
-    --             table.insert(self.towers, t)
-    --             tile.tower = t
-    --         end
-    --     end
-    -- end
 end
 
 function Game:towers_shot(ww, wh)
@@ -150,7 +139,6 @@ end
 
 function Game:draw_tiles(ww, wh, x, y)
     local tile = self.tiles[y][x]
-
     if tile.rendered then
         return
     end
@@ -263,6 +251,9 @@ function Game:draw_enemies(ww, wh)
 end
 
 function Game:draw_tools(ww, wh)
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor({1, 1, 1})
+
     local livesString = tostring(self.lives)
     local livesWidth = font:getWidth(livesString)
     love.graphics.draw(Utils.imageFromCache('assets/hp.png'), 40, 30)
@@ -343,6 +334,8 @@ function Game:draw_tools(ww, wh)
 
         love.graphics.draw(ti, mx, my, 0, 1, 1, tw/2, 173)
     end
+
+    love.graphics.setColor({r, g, b, a})
 end
 
 function Game:draw_win(ww, wh)
@@ -356,6 +349,8 @@ function Game:draw_lose(ww, wh)
 end
 
 function Game:draw_results(ww, wh)
+    local r, g, b, a = love.graphics.getColor()
+
     love.graphics.setColor({0, 0, 0, 0.7})
     love.graphics.rectangle('fill', 0, 0, ww, wh)
 
@@ -365,13 +360,15 @@ function Game:draw_results(ww, wh)
     elseif self.lose then
         self:draw_lose(ww, wh)
     end
+
+    love.graphics.setColor({r, g, b, a})
 end
 
 function Game:draw(ww, wh)
     if self.night then
-        love.graphics.draw(darkmesh, 0, 0, 0, ww, hh)
+        love.graphics.draw(nightGradient, 0, 0, 0, ww, hh)
     else
-        love.graphics.draw(mesh, 0, 0, 0, ww, hh)
+        love.graphics.draw(dayGradient, 0, 0, 0, ww, hh)
     end
 
     self:draw_tiles(ww, wh, #self.tiles, #self.tiles)
@@ -380,7 +377,6 @@ function Game:draw(ww, wh)
     self:draw_enemies(ww, wh)
     self:towers_shot(ww, wh)
 
-    love.graphics.setColor({1, 1, 1})
     self:draw_tools(ww, wh)
 
     if self.win or self.lose then

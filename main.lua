@@ -1,3 +1,5 @@
+local Utils = require 'utils'
+
 App = {
     _current = nil,
     menu = require 'menu',
@@ -24,8 +26,10 @@ function love.load()
     font20 = love.graphics.newFont('DoublePixel.ttf', 20)
     font56 = love.graphics.newFont('DoublePixel.ttf', 56)
 
+    dayGradient = Utils.gradientMesh('vertical', {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1}, {1, 1, 1, 1})
+    nightGradient = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
+
     love.window.setFullscreen(true)
-    love.keyboard.setKeyRepeat(false)
     App.changeScreen('menu')
 end
 
