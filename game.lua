@@ -28,7 +28,7 @@ local Game = {
     win = false,
     lose = false,
     lives = 20,
-    money = 48,
+    money = 72,
     night = os.time() % 2 == 0
 }
 
@@ -247,7 +247,7 @@ function Game:draw_enemies()
         u = u + (sx - sy) * 65 - image:getWidth()/2
         v = v + (sx + sy - 2) * 32 - 21
         love.graphics.draw(enemy:getImage(), u, v)
-        love.graphics.print(tostring(enemy.health), font, u, v)
+        --love.graphics.print(tostring(enemy.health), font, u, v)
     end
 end
 
