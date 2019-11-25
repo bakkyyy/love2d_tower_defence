@@ -29,7 +29,7 @@ local Game = {
     lose = false,
     lives = 20,
     money = 48,
-    night = true
+    night = os.time() % 2 == 0
 }
 
 function Game:load()
@@ -247,6 +247,7 @@ function Game:draw_enemies()
         u = u + (sx - sy) * 65 - image:getWidth()/2
         v = v + (sx + sy - 2) * 32 - 21
         love.graphics.draw(enemy:getImage(), u, v)
+        love.graphics.print(tostring(enemy.health), font, u, v)
     end
 end
 
@@ -363,7 +364,7 @@ function Game:draw_results()
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw(mx, my)
+function Game:draw_all(mx, my)
     if self.night then
         love.graphics.draw(nightGradient, 0, 0, 0, App.width, App.height)
     else
@@ -377,6 +378,16 @@ function Game:draw(mx, my)
     self:towers_shot()
 
     self:draw_tools(mx, my)
+end
+
+function Game:draw(mx, my)
+    if self.paused or self.win or self.lose then
+        blurEffect(function()
+            self:draw_all(mx, my)
+        end)
+    else
+        self:draw_all(mx, my)
+    end
 
     if self.win or self.lose then
         self:draw_results()
