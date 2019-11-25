@@ -247,7 +247,6 @@ function Game:draw_enemies()
         u = u + (sx - sy) * 65 - image:getWidth()/2
         v = v + (sx + sy - 2) * 32 - 21
         love.graphics.draw(enemy:getImage(), u, v)
-        --love.graphics.print(tostring(enemy.health), font, u, v)
     end
 end
 
