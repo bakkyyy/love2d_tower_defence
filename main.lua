@@ -26,6 +26,8 @@ App.isMouseDown = function(i)
 end
 
 function love.load()
+    love.window.setFullscreen(true)
+
     music = Utils.audioFromCache('Main.mp3')
     musicwar = Utils.audioFromCache('Battle.mp3')
     build = Utils.audioFromCache('Build.ogg')
@@ -45,12 +47,10 @@ function love.load()
     dayGradient = Utils.gradientMesh('vertical', {0.160784, 0.501961, 0.72549, 1}, {0.427451, 0.835294, 0.980392, 1})
     nightGradient = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
 
-    love.window.setFullscreen(true)
-    App._current = App['menu']
-    App._current:load()
-
     blurEffect = moonshine(moonshine.effects.gaussianblur)
     blurEffect.gaussianblur.sigma = 5
+    App._current = App['menu']
+    App._current:load()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)

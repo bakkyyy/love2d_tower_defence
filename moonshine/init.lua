@@ -39,11 +39,11 @@ end
 moonshine.chain = function(w,h,effect)
   -- called as moonshine.chain(effect)'
   if h == nil then
-    effect, w,h = w, love.window.getMode()
+    effect, w, h = w, love.window.getMode()
   end
   assert(effect ~= nil, "No effect")
 
-  local front, back = love.graphics.newCanvas(w,h), love.graphics.newCanvas(w,h)
+  local front, back = love.graphics.newCanvas(1920,1080), love.graphics.newCanvas(1920,1080)
   local buffer = function()
     back, front = front, back
     return front, back
@@ -52,7 +52,7 @@ moonshine.chain = function(w,h,effect)
   local disabled = {} -- set of disabled effects
   local chain = {}
   chain.resize = function(w, h)
-    front, back = love.graphics.newCanvas(w,h), love.graphics.newCanvas(w,h)
+    front, back = love.graphics.newCanvas(1920,1080), love.graphics.newCanvas(1920,1080)
     return chain
   end
 

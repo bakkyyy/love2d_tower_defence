@@ -358,9 +358,6 @@ end
 function Game:draw_results()
     local r, g, b, a = love.graphics.getColor()
 
-    love.graphics.setColor({0, 0, 0, 0.7})
-    love.graphics.rectangle('fill', 0, 0, App.width, App.height)
-
     love.graphics.setColor({1, 1, 1})
     if self.win then
         self:draw_win()

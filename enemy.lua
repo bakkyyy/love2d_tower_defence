@@ -243,7 +243,6 @@ function Enemy:update(state, dt)
     end
 
     if self.isDead then
-        state.money = state.money + self.reward
         return
     end
 
@@ -279,10 +278,11 @@ function Enemy:update(state, dt)
     end
 end
 
-function Enemy:takeDamage(amount)
+function Enemy:takeDamage(state, amount)
     self.health = self.health - amount
     if self.health <= 0 then
         self.isDead = true
+        state.money = state.money + self.reward
         self.currentFrame = 1
         self.frames = enemyTypes[self.type].die
     end

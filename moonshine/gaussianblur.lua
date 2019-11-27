@@ -39,10 +39,10 @@ return function(moonshine)
   end
 
   local draw = function(buffer)
-    shader:send('direction', {1 / love.graphics.getWidth(), 0})
+    shader:send('direction', {1.0 / 1920.0, 0})
     moonshine.draw_shader(buffer, shader)
 
-    shader:send('direction', {0, 1 / love.graphics.getHeight()})
+    shader:send('direction', {0, 1.0 / 1080.0})
     moonshine.draw_shader(buffer, shader)
   end
 

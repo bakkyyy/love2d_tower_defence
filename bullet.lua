@@ -24,13 +24,15 @@ function Bullet:new(tower, enemy)
     return setmetatable(b, self)
 end
 
-function Bullet:update(state, dt)
+function Bullet:turn()
     local angle = math.atan2(self.target.position[1] - self.position[1], self.target.position[2] - self.position[2])
     if angle < 0 then
         angle = angle + 2*math.pi
     end
     self.rotation = math.pi/4 - angle
+end
 
+function Bullet:update(state, dt)
     local dx = self.target.position[1] - self.position[1]
     local dy = self.target.position[2] - self.position[2]
 
@@ -38,7 +40,7 @@ function Bullet:update(state, dt)
     self.position[2] = self.position[2] + 10*dy*dt
 
     if dx*dx+dy*dy < 0.5 then
-        self.target:takeDamage(self.tower:getDamage())
+        self.target:takeDamage(state, self.tower:getDamage())
         if self.tower.type == 1 then
             self.target:froze()
         end
@@ -47,6 +49,7 @@ function Bullet:update(state, dt)
 end
 
 function Bullet:getImage()
+    self:turn()
     return self.image
 end
 
