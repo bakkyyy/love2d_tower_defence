@@ -132,10 +132,18 @@ function Game:update(dt)
 
     if self.lives == 0 then
         self.lose = true
+        musicwar:stop()
+        losesound:setVolume(1)
+        losesound:setLooping(false)
+        losesound:play()
     end
 
     if self.wave == #Map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
         self.win = true
+        musicwar:stop()
+        winsound:setVolume(1)
+        winsound:setLooping(false)
+        winsound:play()
     end
 end
 
