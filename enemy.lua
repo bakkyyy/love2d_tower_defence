@@ -237,6 +237,7 @@ function Enemy:update(state, dt)
 
     if self.pathIndex >= #self.path then
         state.lives = state.lives - 1
+        self.isDead = true
         self:destroy(state)
         return
     end
