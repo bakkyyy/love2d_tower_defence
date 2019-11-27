@@ -13,6 +13,7 @@ App = {
 App.changeScreen = function(name, ...)
     App._current = App[name]
     App._current:load(...)
+    click:play()
 end
 
 App.isMouseDown = function(i)
@@ -22,6 +23,13 @@ App.isMouseDown = function(i)
 end
 
 function love.load()
+    music = Utils.audioFromCache('Main.mp3')
+    musicwar = Utils.audioFromCache('Battle.mp3')
+    build = Utils.audioFromCache('Build.ogg')
+    click = Utils.audioFromCache('Click.ogg')
+    music:setVolume(0.5)
+    music:setLooping(true)
+    music:play()
     math.randomseed(os.time())
 
     font = love.graphics.newFont('DoublePixel.ttf', 64)

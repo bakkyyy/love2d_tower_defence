@@ -1,14 +1,12 @@
 local Utils = require 'utils'
 
-local Settings = { buttons = {} }
+local Settings = { buttons = {}, musicVolume = 0.5, effectsVolume = 0.5 }
 
 function Settings:load()
     logo = Utils.imageFromCache("assets/logo.png")
     scroll = Utils.imageFromCache("assets/settings/scroll_area.png")
     mc = Utils.imageFromCache("assets/settings/scroll.png")
     es = Utils.imageFromCache("assets/settings/scroll.png")
-    music = 0.5
-    effects = 0.5
 
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/settings/button_back2.png"), fn = function()
         App.changeScreen('menu')

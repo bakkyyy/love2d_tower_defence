@@ -178,7 +178,7 @@ return {
     waves = {
         {
             {
-                type = 1,
+                type = 2,
                 count = 10,
                 speed = 2,
                 reward = 5,
@@ -186,7 +186,7 @@ return {
                 spawnInterval = 1
             },
             {
-                type = 2,
+                type = 4,
                 count = 20,
                 speed = 1,
                 reward = 10,
@@ -195,6 +195,14 @@ return {
             },
             {
                 type = 3,
+                count = 50,
+                speed = 1.5,
+                reward = 10,
+                health = 6,
+                spawnInterval = 1
+            },
+            {
+                type = 2,
                 count = 50,
                 speed = 1.5,
                 reward = 10,

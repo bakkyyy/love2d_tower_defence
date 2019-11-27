@@ -3,10 +3,6 @@ local Utils = require 'utils'
 local Menu = { buttons = {} }
 
 function Menu:load()
-    music = Utils.audioFromCache('Main.mp3')
-    music:setLooping(true)
-    music:play()
-
     logo = Utils.imageFromCache("assets/logo.png")
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
         App.changeScreen('game')
@@ -15,10 +11,11 @@ function Menu:load()
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = nil })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu4.png"), fn = function()
         App.changeScreen('settings')
+        
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu5.png"), fn = function()
-        love.window.close()
         music:stop()
+        love.window.close()
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu.png"), fn = nil })
 end

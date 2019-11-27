@@ -55,6 +55,8 @@ function Tower:new(type, position)
         rotation = 1,
         type = type
     }
+    build:setLooping(false)
+    build:play()
     uniqueId = uniqueId + 1
     self.__index = self
     return setmetatable(o, self)

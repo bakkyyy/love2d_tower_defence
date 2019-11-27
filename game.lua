@@ -33,8 +33,8 @@ local Game = {
 }
 
 function Game:load()
-    musicwar = Utils.audioFromCache('GoForWar.wav')
     musicwar:setLooping(true)
+    musicwar:setVolume(0.1)
     musicwar:play()
 end
 
@@ -54,7 +54,7 @@ function Game:towers_shot()
                 local dx = enemy.position[1] - tower.position[1]
                 local dy = enemy.position[2] - tower.position[2]
                 local ar = tower:getAttackRange()
-                if dx*dx+dy*dy <= ar*ar then
+                if dx*dx+dy*dy <= ar*ar and not enemy.isDead then
                     tower.target = enemy
                 end
             end
