@@ -34,7 +34,7 @@ local Game = {
 
 function Game:load()
     musicwar:setLooping(true)
-    musicwar:setVolume(0.5)
+    musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
 end
 
@@ -133,7 +133,7 @@ function Game:update(dt)
     if self.lives == 0 then
         self.lose = true
         musicwar:stop()
-        losesound:setVolume(1)
+        losesound:setVolume(App.settings.effectsVolume)
         losesound:setLooping(false)
         losesound:play()
     end
@@ -141,7 +141,7 @@ function Game:update(dt)
     if self.wave == #Map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
         self.win = true
         musicwar:stop()
-        winsound:setVolume(1)
+        winsound:setVolume(App.settings.effectsVolume)
         winsound:setLooping(false)
         winsound:play()
     end
