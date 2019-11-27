@@ -28,8 +28,8 @@ local Game = {
     win = false,
     lose = false,
     lives = 20,
-    money = 48,
-    night = true
+    money = 72,
+    night = os.time() % 2 == 0
 }
 
 function Game:load()
@@ -363,7 +363,7 @@ function Game:draw_results()
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw(mx, my)
+function Game:draw_all(mx, my)
     if self.night then
         love.graphics.draw(nightGradient, 0, 0, 0, App.width, App.height)
     else
@@ -377,6 +377,16 @@ function Game:draw(mx, my)
     self:towers_shot()
 
     self:draw_tools(mx, my)
+end
+
+function Game:draw(mx, my)
+    if self.paused or self.win or self.lose then
+        blurEffect(function()
+            self:draw_all(mx, my)
+        end)
+    else
+        self:draw_all(mx, my)
+    end
 
     if self.win or self.lose then
         self:draw_results()

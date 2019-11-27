@@ -23,7 +23,7 @@ towerTypes = {
         },
         price = 80,
         attackRange = 2,
-        attackSpeed = 3,
+        attackSpeed = 2.75,
         damage = 25,
         shot = Utils.audioFromCache('Cannon.mp3')
     },

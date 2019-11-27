@@ -178,36 +178,288 @@ return {
     waves = {
         {
             {
-                type = 2,
-                count = 10,
+                type = 1,
+                count = 1,
                 speed = 2,
-                reward = 5,
+                reward = 2,
                 health = 6,
-                spawnInterval = 1
+                spawnInterval = 2
             },
             {
-                type = 4,
-                count = 20,
-                speed = 1,
-                reward = 10,
+                type = 1,
+                count = 19,
+                speed = 2,
+                reward = 2,
                 health = 6,
                 spawnInterval = 1
+            }
+        },
+        {
+            {
+                type = 2,
+                count = 1,
+                speed = 1.9,
+                reward = 1,
+                health = 6,
+                spawnInterval = 3.8
+            },
+            {
+                type = 2,
+                count = 24,
+                speed = 1.9,
+                reward = 1,
+                health = 6,
+                spawnInterval = 0.5
             },
             {
                 type = 3,
-                count = 50,
+                count = 1,
+                speed = 1.4,
+                reward = 5,
+                health = 36,
+                spawnInterval = 5
+            },
+            {
+                type = 3,
+                count = 5,
+                speed = 1.4,
+                reward = 5,
+                health = 36,
+                spawnInterval = 2
+            }
+        },
+        {
+            {
+                type = 1,
+                count = 1,
+                speed = 1.85,
+                reward = 3,
+                health = 15,
+                spawnInterval = 5
+            },
+            {
+                type = 1,
+                count = 14,
+                speed = 1.85,
+                reward = 3,
+                health = 15,
+                spawnInterval = 0.8
+            },
+            {
+                type = 4,
+                count = 1,
                 speed = 1.5,
-                reward = 10,
+                reward = 15,
+                health = 90,
+                spawnInterval = 10
+            }
+        },
+        {
+            {
+                type = 2,
+                count = 1,
+                speed = 2.2,
+                reward = 2,
                 health = 6,
-                spawnInterval = 1
+                spawnInterval = 8
             },
             {
                 type = 2,
-                count = 50,
-                speed = 1.5,
-                reward = 10,
+                count = 29,
+                speed = 2.2,
+                reward = 2,
                 health = 6,
-                spawnInterval = 1
+                spawnInterval = 0.4
+            },
+            {
+                type = 3,
+                count = 1,
+                speed = 1.75,
+                reward = 8,
+                health = 50,
+                spawnInterval = 7.5
+            },
+            {
+                type = 3,
+                count = 7,
+                speed = 1.75,
+                reward = 8,
+                health = 50,
+                spawnInterval = 1.5
+            },
+        },
+        {
+            {
+                type = 1,
+                count = 1,
+                speed = 2,
+                reward = 3,
+                health = 25,
+                spawnInterval = 7
+            },
+            {
+                type = 1,
+                count = 24,
+                speed = 2,
+                reward = 3,
+                health = 25,
+                spawnInterval = 0.8
+            }
+        },
+        {
+            {
+                type = 2,
+                count = 1,
+                speed = 1.9,
+                reward = 2,
+                health = 10,
+                spawnInterval = 8
+            },
+            {
+                type = 2,
+                count = 27,
+                speed = 1.9,
+                reward = 2,
+                health = 10,
+                spawnInterval = 0.35
+            },
+            {
+                type = 3,
+                count = 1,
+                speed = 1.5,
+                reward = 8,
+                health = 67,
+                spawnInterval = 6
+            },
+            {
+                type = 3,
+                count = 9,
+                speed = 1.65,
+                reward = 8,
+                health = 67,
+                spawnInterval = 1.5
+            }
+        },
+        {
+            {
+                type = 1,
+                count = 1,
+                speed = 2.1,
+                reward = 3,
+                health = 40,
+                spawnInterval = 7
+            },
+            {
+                type = 1,
+                count = 24,
+                speed = 2.1,
+                reward = 3,
+                health = 40,
+                spawnInterval = 0.9
+            }
+        },
+        {
+            {
+                type = 4,
+                count = 1,
+                speed = 1.4,
+                reward = 25,
+                health = 140,
+                spawnInterval = 7
+            },
+            {
+                type = 4,
+                count = 3,
+                speed = 1.4,
+                reward = 25,
+                health = 140,
+                spawnInterval = 2.5
+            },
+            {
+                type = 2,
+                count = 1,
+                speed = 2.3,
+                reward = 2,
+                health = 14,
+                spawnInterval = 6
+            },
+            {
+                type = 2,
+                count = 34,
+                speed = 2.3,
+                reward = 2,
+                health = 14,
+                spawnInterval = 0.3
+            }
+        },
+        {
+            {
+                type = 1,
+                count = 1,
+                speed = 2.1,
+                reward = 4,
+                health = 50,
+                spawnInterval = 6
+            },
+            {
+                type = 1,
+                count = 29,
+                speed = 2.1,
+                reward = 4,
+                health = 50,
+                spawnInterval = 0.5
+            }
+        },
+        {
+            {
+                type = 3,
+                count = 1,
+                speed = 2,
+                reward = 12,
+                health = 180,
+                spawnInterval = 6
+            },
+            {
+                type = 3,
+                count = 7,
+                speed = 2,
+                reward = 12,
+                health = 180,
+                spawnInterval = 4
+            },
+            {
+                type = 2,
+                count = 1,
+                speed = 2.4,
+                reward = 2,
+                health = 21,
+                spawnInterval = 6
+            },
+            {
+                type = 2,
+                count = 39,
+                speed = 2.4,
+                reward = 2,
+                health = 21,
+                spawnInterval = 0.25
+            }
+        },
+        {
+            {
+                type = 1,
+                count = 1,
+                speed = 2,
+                reward = 5,
+                health = 50,
+                spawnInterval = 6
+            },
+            {
+                type = 1,
+                count = 24,
+                speed = 2,
+                reward = 5,
+                health = 65,
+                spawnInterval = 0.6
             }
         }
     }
