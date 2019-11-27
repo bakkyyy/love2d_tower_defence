@@ -42,8 +42,9 @@ function Settings:draw(mx, my)
     end
     --love.graphics.print({msx + 1.5*scroll:getWidth(), mx})
     --love.graphics.rectangle('line', msx, msy, 1.5*scroll:getWidth(), 1.5*scroll:getHeight())
-    love.graphics.draw(mc, msx + 1.45*scroll:getWidth()*self.musicVolume, 2.25*App.height/5 - 30, 0, 1.5, 1.5)
     --love.graphics.draw(mc, cx - 3*scroll:getWidth()/4 + 1.5*scroll:getWidth() * (1 - self.musicVolume), App.height/2.20, 0, 1.5, 1.5)
+    
+    love.graphics.draw(mc, msx + 1.45*scroll:getWidth()*self.musicVolume, 2.25*App.height/5 - 30, 0, 1.5, 1.5)
     
     love.graphics.print("ЭФФЕКТЫ", font, cx - effectsWidth/2, 2.75*App.height/5)
     love.graphics.draw(scroll, cx, 3.25*App.height/5, 0, 1.5, 1.5, 0.5*scroll:getWidth(), 0.5*scroll:getHeight())
@@ -55,6 +56,7 @@ function Settings:draw(mx, my)
         local ax = esx + 1.5*scroll:getWidth() - mx
         self.effectsVolume = 1 - (ax/(1.5*scroll:getWidth()))
         click:setVolume(App.settings.effectsVolume)
+        build:setVolume(App.settings.effectsVolume)
     end
     
     love.graphics.draw(sc, esx + 1.45*scroll:getWidth()*self.effectsVolume, 3.25*App.height/5 - 30, 0, 1.5, 1.5)

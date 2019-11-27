@@ -56,6 +56,7 @@ function Tower:new(type, position)
         type = type
     }
     build:setLooping(false)
+    build:setVolume(App.settings.effectsVolume)
     build:play()
     uniqueId = uniqueId + 1
     self.__index = self
@@ -100,12 +101,14 @@ function Tower:getDamage()
 end
 
 function Tower:getRefund()
+    sellsound:setLooping(false)
     sellsound:setVolume(App.settings.effectsVolume)
     sellsound:play()
     return self.data.price/2
 end
 
 function Tower:shot()
+    self.data.shot:setVolume(App.settings.effectsVolume)
     self.data.shot:play()
     self:turn()
 end
