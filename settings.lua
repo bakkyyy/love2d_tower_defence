@@ -45,7 +45,7 @@ function Settings:draw(mx, my)
 
     love.graphics.print({msx + 1.5*scroll:getWidth(), mx})
 
-    love.graphics.rectangle('line', msx, msy, 1.5*scroll:getWidth(), 1.5*scroll:getHeight())
+    --love.graphics.rectangle('line', msx, msy, 1.5*scroll:getWidth(), 1.5*scroll:getHeight())
 
     local hovered = false
 
