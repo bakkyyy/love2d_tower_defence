@@ -100,6 +100,8 @@ function Tower:getDamage()
 end
 
 function Tower:getRefund()
+    sellsound:setVolume(1)
+    sellsound:play()
     return self.data.price/2
 end
 
