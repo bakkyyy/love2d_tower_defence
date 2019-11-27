@@ -12,9 +12,9 @@ App = {
     height = 1080
 }
 
-App.changeScreen = function(name, ...)
+App.changeScreen = function(name)
     App._current = App[name]
-    App._current:load(...)
+    App._current:load()
     click:play()
 end
 
@@ -45,7 +45,8 @@ function love.load()
     nightGradient = Utils.gradientMesh('vertical', {0, 0.0156863, 0.156863, 1}, {0, 0.305882, 0.572549, 1})
 
     love.window.setFullscreen(true)
-    App.changeScreen('menu')
+    App._current = App['menu']
+    App._current:load()
 
     blurEffect = moonshine(moonshine.effects.gaussianblur)
     blurEffect.gaussianblur.sigma = 5
