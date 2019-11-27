@@ -7,6 +7,7 @@ App = {
     menu = require 'menu',
     game = require 'game',
     settings = require 'settings',
+    loadgame = require 'loadgame',
     mouseDown = {},
     width = 1920,
     height = 1080

@@ -8,10 +8,11 @@ function Menu:load()
         App.changeScreen('game')
         music:stop()
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = function()
+        App.changeScreen('loadgame')
+    end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu4.png"), fn = function()
         App.changeScreen('settings')
-        
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu5.png"), fn = function()
         music:stop()
@@ -35,10 +36,13 @@ function Menu:draw(mx, my)
     local cursorY = 0
     local hovered = false
 
-    for i, btn in ipairs(self.buttons) do
+    for i = 1,4 do
+        local btn = self.buttons[i]
         local bx = cx - 200 + 24
         local by = 2*App.height/5 + cursorY
         local mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105
+
+        --love.graphics.rectangle('line', bx, by, 360, 105)
 
         if mouseOver then
             love.graphics.draw(btn.image, cx, 2*App.height/5, 0, 1, 1, 0.5*btn.image:getWidth())

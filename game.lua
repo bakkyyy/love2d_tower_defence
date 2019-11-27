@@ -34,7 +34,7 @@ local Game = {
 
 function Game:load()
     musicwar:setLooping(true)
-    musicwar:setVolume(0.1)
+    musicwar:setVolume(0.5)
     musicwar:play()
 end
 
