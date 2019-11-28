@@ -131,5 +131,5 @@ return {
     removeByKey = removeByKey,
     pointInRect = pointInRect,
     clamp = clamp,
-    tableSize = tableSize   
+    tableSize = tableSize
 }

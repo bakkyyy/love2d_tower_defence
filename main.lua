@@ -64,7 +64,12 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     if key == 'escape' and App._current == App.game then
-        App.game.paused = not App.game.paused
+        App.game:pause()
+    end
+
+    if App._current == App.game and (App.game.state == GAME_STATE_WIN or App.game.state == GAME_STATE_LOSE) then
+        App.game.state = GAME_STATE_STOPED
+        App.changeScreen('menu')
     end
 end
 
