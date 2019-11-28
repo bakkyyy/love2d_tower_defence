@@ -4,9 +4,9 @@ local Menu = { buttons = {} }
 
 function Menu:load()
     logo = Utils.imageFromCache("assets/logo.png")
+    
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
-        App.changeScreen('game')
-        music:stop()
+        App.changeScreen('newgame')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = function()
         App.changeScreen('loadgame')

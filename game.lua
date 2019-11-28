@@ -5,7 +5,7 @@ local Tower = require 'tower'
 local Bullet = require 'bullet'
 local Utils = require 'utils'
 
-local Map = Summer
+local Map = Summer --App.newgame.mapType
 
 GAME_STATE_PLAYING = 1
 GAME_STATE_WIN = 2

@@ -63,19 +63,18 @@ function Settings:draw(mx, my)
 
     
     local hovered = false
+    local bx = cx - 200 + 24
+    local by = 4*App.height/5
+    
+    mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105
 
-        local btn = self.buttons[1]
-        local bx = cx - 200 + 24
-        local by = 4*App.height/5
-        mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105
-
-        if mouseOver then
-            love.graphics.draw(btn.image, cx, 4*App.height/5, 0, 1, 1, 0.5*btn.image:getWidth())
-            hovered = true
-            if App.isMouseDown(1) then
-                btn.fn()
-            end
+    if mouseOver then
+        love.graphics.draw(self.buttons[1].image, cx, 4*App.height/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[1].fn()
         end
+    end
 
     if not hovered then
         love.graphics.draw(self.buttons[2].image, cx, 4*App.height/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())

@@ -5,6 +5,7 @@ local Utils = require 'utils'
 App = {
     _current = nil,
     menu = require 'menu',
+    newgame = require 'newgame',
     game = require 'game',
     settings = require 'settings',
     loadgame = require 'loadgame',
