@@ -25,7 +25,7 @@ local Game = {
     enemiesToSpawn = 0,
     spawnedAt = 0,
     selectedTower = 0,
-    state = GAME_STATE_STOPED,
+    state = GAME_STATE_PLAYING,
     lives = 20,
     money = 72,
     night = os.time() % 2 == 0
