@@ -1,17 +1,19 @@
+local Winter = require 'winter'
+local Summer = require 'summer'
 local Utils = require 'utils'
 
-local Newgame = { buttons = {} }--, mapType = require 'summer' }
+local Newgame = { buttons = {}, mapType = nil }
 
 function Newgame:load()
     logo = Utils.imageFromCache("assets/logo.png")
 
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame3.png"), fn = function()
-        --self.mapType = require 'summer'
+        self.mapType = Summer
         App.changeScreen('game')
         music:stop()
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame2.png"), fn = function()
-        --self.mapType = require 'winter'
+        self.mapType = Winter
         App.changeScreen('game')
         music:stop()
     end })
@@ -44,7 +46,7 @@ function Newgame:draw(mx, my)
     mouseOver1 = bx1 < mx and mx < bx1 + 385 and by1 < my and my < by1 + 215
     mouseOver2 = bx2 < mx and mx < bx2 + 385 and by2 < my and my < by2 + 215
     mouseOver3 = bx3 < mx and mx < bx3 + 360 and by3 < my and my < by3 + 100
-    
+
     if mouseOver1 then
         love.graphics.draw(self.buttons[1].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
         hovered = true

@@ -5,7 +5,7 @@ local Tower = require 'tower'
 local Bullet = require 'bullet'
 local Utils = require 'utils'
 
-local Map = Summer --App.newgame.mapType
+local Map = nil
 
 GAME_STATE_PLAYING = 1
 GAME_STATE_WIN = 2
@@ -14,7 +14,6 @@ GAME_STATE_PAUSED = 8
 GAME_STATE_STOPED = 16
 
 local Game = {
-    tiles = Map.tiles,
     enemies = {},
     towers = {},
     bullets = {},
@@ -40,6 +39,8 @@ function Game:pause()
 end
 
 function Game:load()
+    Map = App.newgame.mapType
+    self.tiles = Map.tiles
     musicwar:setLooping(true)
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
