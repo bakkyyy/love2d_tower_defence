@@ -53,6 +53,16 @@ function Bullet:getImage()
     return self.image
 end
 
+function Bullet:draw()
+    local u = App.width/2
+    local v = App.height/2 - 6*65
+
+    local bx = u + (self.position[1] - self.position[2]) * 65
+    local by = v + (self.position[1] + self.position[2] - 2) * 32
+
+    love.graphics.draw(self:getImage(), bx, by, self.rotation)
+end
+
 function Bullet:destroy(state)
     Utils.removeByKey(state.bullets, self.id)
 end

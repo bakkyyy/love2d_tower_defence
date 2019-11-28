@@ -5,12 +5,13 @@ local Tower = require 'tower'
 local Bullet = require 'bullet'
 local Utils = require 'utils'
 
-local Map = Summer
+local Map = Winter
 
 GAME_STATE_PLAYING = 1
 GAME_STATE_WIN = 2
 GAME_STATE_LOSE = 4
 GAME_STATE_PAUSED = 8
+GAME_STATE_STOPED = 16
 
 local Game = {
     tiles = Map.tiles,
@@ -24,13 +25,19 @@ local Game = {
     enemiesToSpawn = 0,
     spawnedAt = 0,
     selectedTower = 0,
-    paused = false,
-    win = false,
-    lose = false,
+    state = GAME_STATE_STOPED,
     lives = 20,
     money = 72,
     night = os.time() % 2 == 0
 }
+
+function Game:pause()
+    if self.state == GAME_STATE_PLAYING then
+        self.state = GAME_STATE_PAUSED
+    elseif self.state == GAME_STATE_PAUSED then
+        self.state = GAME_STATE_PLAYING
+    end
+end
 
 function Game:load()
     musicwar:setLooping(true)
@@ -38,51 +45,8 @@ function Game:load()
     musicwar:play()
 end
 
-function Game:towers_shot()
-    for i,tower in pairs(self.towers) do
-        if tower.target ~= nil then
-            local dx = tower.target.position[1] - tower.position[1]
-            local dy = tower.target.position[2] - tower.position[2]
-            local ar = tower:getAttackRange()
-            if tower.target.isDead or dx*dx+dy*dy > ar*ar then
-                tower.target = nil
-            end
-        end
-
-        if tower.target == nil then
-            for j, enemy in pairs(self.enemies) do
-                local dx = enemy.position[1] - tower.position[1]
-                local dy = enemy.position[2] - tower.position[2]
-                local ar = tower:getAttackRange()
-                if dx*dx+dy*dy <= ar*ar and not enemy.isDead then
-                    tower.target = enemy
-                end
-            end
-        end
-
-        if tower.target ~= nil then
-            if self.timeNow - tower.lastShotAt > tower:getAttackSpeed() then
-                tower.lastShotAt = self.timeNow
-                local b = Bullet:new(tower, tower.target)
-                table.insert(self.bullets, b.id, b)
-                tower:shot()
-            end
-        end
-    end
-
-    for i,bullet in pairs(self.bullets) do
-        local u = App.width/2
-        local v = (App.height - #self.tiles*65) / 2
-
-        local bx = u + (bullet.position[1] - bullet.position[2]) * 65
-        local by = v + (bullet.position[1] + bullet.position[2] - 2) * 32
-
-        love.graphics.draw(bullet:getImage(), bx, by, bullet.rotation)
-    end
-end
-
 function Game:update(dt)
-    if self.paused or self.win or self.lose then
+    if self.state ~= GAME_STATE_PLAYING then
         return
     end
 
@@ -122,16 +86,16 @@ function Game:update(dt)
         self.selectedTower = 0
     end
 
-    for i, bullet in pairs(self.bullets) do
-        bullet:update(self, dt)
-    end
-
-    for i, enemy in pairs(self.enemies) do
+    for i,enemy in pairs(self.enemies) do
         enemy:update(self, dt)
     end
 
+    for i,tower in pairs(self.towers) do
+        tower:update(self, dt)
+    end
+
     if self.lives == 0 then
-        self.lose = true
+        self.state = GAME_STATE_LOSE
         musicwar:stop()
         losesound:setVolume(App.settings.effectsVolume)
         losesound:setLooping(false)
@@ -139,7 +103,7 @@ function Game:update(dt)
     end
 
     if self.wave == #Map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
-        self.win = true
+        self.state = GAME_STATE_WIN
         musicwar:stop()
         winsound:setVolume(App.settings.effectsVolume)
         winsound:setLooping(false)
@@ -147,58 +111,7 @@ function Game:update(dt)
     end
 end
 
-function Game:draw_tiles(mx, my, x, y)
-    local tile = self.tiles[y][x]
-    if tile.rendered then
-        return
-    end
-
-    local sx = tile.start[1]
-    local sy = tile.start[2]
-
-    if sy > 1 then
-        self:draw_tiles(mx, my, sx, sy-1)
-        if tile.mode == DRAW_MODE_2x2 or tile.mode == DRAW_MODE_2x1 then
-            self:draw_tiles(mx, my, sx+1, sy-1)
-        end
-    end
-
-    if sx > 1 then
-        self:draw_tiles(mx, my, sx-1, sy)
-        if tile.mode == DRAW_MODE_2x2 or tile.mode == DRAW_MODE_1x2 then
-            self:draw_tiles(mx, my, sx-1, sy+1)
-        end
-    end
-
-    local u = App.width/2
-    local v = (App.height - #self.tiles*65) / 2
-
-    if tile.mode == DRAW_MODE_1x1 then
-        u = u + (sx - sy) * 65 - 130
-        v = v + (sx + sy - 2) * 32 - 141
-    end
-
-    if tile.mode == DRAW_MODE_1x2 then
-        u = u + (sx - sy) * 97 - 130
-        v = v + (sx + sy - 2) * 32 - 125
-    end
-
-    if tile.mode == DRAW_MODE_2x1 then
-        u = u + (sx - sy) * 97 - 97
-        v = v + (sx + sy - 2) * 32 - 125
-    end
-
-    if tile.mode == DRAW_MODE_2x2 then
-        u = u + (sx - sy) * 130 - 130
-        v = v + (sx + sy - 4) * 65 - 111
-    end
-
-    local m = { mx, my }
-    local a = { u+130, v+205 }
-    local b = { u+195, v+173 }
-    local c = { u+130, v+141 }
-    local d = { u+65, v+173 }
-
+function Game:drawTiles(mx, my)
     local color = {1, 1, 1}
     local colorHover = {0.7, 0.7, 0.7}
     if self.night then
@@ -206,38 +119,64 @@ function Game:draw_tiles(mx, my, x, y)
         colorHover = {1, 1, 1}
     end
 
-    if tile.towerable and Utils.pointInRect(a, b, c, d, m) then
-        love.graphics.setColor(colorHover)
+    for k = 0,23 do
+        for j = 0,k do
+            local i = k - j
+            if i < 12 and j < 12 then
+                local tile = self.tiles[i+1][j+1]
+                local u = App.width/2
+                local v = App.height/2 - 6*65
+                u = u + (j - i) * 65 - 130
+                v = v + (j + i) * 32 - 141
 
-        if self.selectedTower ~= 0 and App.isMouseDown(1) then
-            if self.selectedTower > 0 and tile.tower == nil then
-                local t = Tower:new(self.selectedTower, {x, y})
-                table.insert(self.towers, t.id, t)
-                tile.tower = t
-                self.money = self.money - towerTypes[self.selectedTower].price
-                self.selectedTower = 0
-            elseif self.selectedTower < 0 and tile.tower ~= nil then
-                Utils.removeByKey(self.towers, tile.tower.id)
-                self.money = self.money + tile.tower:getRefund()
-                tile.tower = nil
+                local cursor = { mx, my }
+                local bottom = { u+130, v+205 }
+                local right = { u+195, v+173 }
+                local top = { u+130, v+141 }
+                local left = { u+65, v+173 }
+
+                if tile.towerable and Utils.pointInRect(top, right, bottom, left, cursor) then
+                    love.graphics.setColor(colorHover)
+
+                    if App.isMouseDown(1) then
+                        if self.selectedTower > 0 and tile.tower == nil then
+                            local t = Tower:new(self.selectedTower, {j+1, i+1})
+                            table.insert(self.towers, t.id, t)
+                            tile.tower = t
+                            self.money = self.money - towerTypes[self.selectedTower].price
+                            self.selectedTower = 0
+                        elseif self.selectedTower < 0 and tile.tower ~= nil then
+                            Utils.removeByKey(self.towers, tile.tower.id)
+                            self.money = self.money + tile.tower:getRefundAmount()
+                            tile.tower = nil
+                        end
+                    end
+                end
+
+                love.graphics.draw(tile.image, u, v)
+                love.graphics.setColor(color)
+
+                for _, enemy in pairs(self.enemies) do
+                    local x = enemy.position[1]
+                    local y = enemy.position[2]
+                    if i < y and y <= i+1 and j < x and x <= j+1 then
+                        local image = enemy:getImage()
+                        local u = App.width/2 + (x - y) * 65 - image:getWidth()/2
+                        local v = App.height/2 - 6*65 + (x + y - 2) * 32 - 21
+                        love.graphics.draw(enemy:getImage(), u, v)
+                    end
+                end
+
+                if tile.tower ~= nil then
+                    tile.tower:draw(self, u, v)
+                end
+                tile.rendered = true
             end
-        end
-    end
-
-    love.graphics.draw(tile.image, u, v)
-    if tile.tower ~= nil then
-        love.graphics.draw(tile.tower:getImage(), u, v - 16)
-    end
-    love.graphics.setColor(color)
-
-    for i = tile.start[1],tile.stop[1] do
-        for j = tile.start[2],tile.stop[2] do
-            self.tiles[j][i].rendered = true
         end
     end
 end
 
-function Game:reset_tiles()
+function Game:resetTiles()
     for i, row in pairs(self.tiles) do
         for j, tile in pairs(row) do
             tile.rendered = false
@@ -245,20 +184,7 @@ function Game:reset_tiles()
     end
 end
 
-function Game:draw_enemies()
-    for i, enemy in pairs(self.enemies) do
-        local image = enemy:getImage()
-        local sx = enemy.position[1]
-        local sy = enemy.position[2]
-        local u = App.width/2
-        local v = (App.height - #self.tiles*65) / 2
-        u = u + (sx - sy) * 65 - image:getWidth()/2
-        v = v + (sx + sy - 2) * 32 - 21
-        love.graphics.draw(enemy:getImage(), u, v)
-    end
-end
-
-function Game:draw_tools(mx, my)
+function Game:drawHUD(mx, my)
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor({1, 1, 1})
 
@@ -318,7 +244,7 @@ function Game:draw_tools(mx, my)
         local scale = 0.8
         if tool.min[1] <= mx and mx <= tool.max[1] and tool.min[2] <= my and my <= tool.max[2] then
             scale = 1
-            if App.isMouseDown(1) and not self.paused and not self.win and not self.lose and tool.price <= self.money then
+            if App.isMouseDown(1) and self.state == GAME_STATE_PLAYING and tool.price <= self.money then
                 self.selectedTower = i
             end
         end
@@ -359,41 +285,37 @@ function Game:draw_results()
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
-    if self.win then
+    if self.state == GAME_STATE_WIN then
         self:draw_win()
-    elseif self.lose then
+    elseif self.state == GAME_STATE_LOSE then
         self:draw_lose()
     end
 
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw_all(mx, my)
+function Game:drawAll(mx, my)
     if self.night then
         love.graphics.draw(nightGradient, 0, 0, 0, App.width, App.height)
     else
         love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end
 
-    self:draw_tiles(mx, my, #self.tiles, #self.tiles)
-    self:reset_tiles()
-
-    self:draw_enemies()
-    self:towers_shot()
-
-    self:draw_tools(mx, my)
+    self:drawTiles(mx, my)
+    self:resetTiles()
+    self:drawHUD(mx, my)
 end
 
 function Game:draw(mx, my)
-    if self.paused or self.win or self.lose then
+    if self.state ~= GAME_STATE_PLAYING then
         blurEffect(function()
-            self:draw_all(mx, my)
+            self:drawAll(mx, my)
         end)
     else
-        self:draw_all(mx, my)
+        self:drawAll(mx, my)
     end
 
-    if self.win or self.lose then
+    if self.state == GAME_STATE_WIN or self.state == GAME_STATE_LOSE then
         self:draw_results()
     end
 end
