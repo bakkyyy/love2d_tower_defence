@@ -3,33 +3,35 @@ local Utils = require 'utils'
 local Menu = { buttons = {} }
 
 function file_exists(name)
-    local f = io.open(name,"r")
-    if f~=nil then 
-        io.close(f)  
+    local f = io.open(name,'r')
+    if f~=nil then
+        io.close(f)
     --else love.graphics.rectangle('line', 50, 50, 150, 150)
     end
  end
 
 function Menu:load()
-    logo = Utils.imageFromCache("assets/logo.png")
+    logo = Utils.imageFromCache('assets/logo.png')
     local fex = file_exists('save.bin')
-    
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
+
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu2.png'), fn = function()
         App.changeScreen('newgame')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = function()
-        if not fex then
-            App.changeScreen('loadgame')
-        end
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu3.png'), fn = function()
+        -- if not fex then
+        --     App.changeScreen('loadgame')
+        -- end
+        App.changeScreen('game')
+        App.game:loadFromFile()
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu4.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu4.png'), fn = function()
         App.changeScreen('settings')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu5.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu5.png'), fn = function()
         music:stop()
         love.window.close()
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu.png'), fn = nil })
 end
 
 function Menu:update(dt)

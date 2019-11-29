@@ -187,16 +187,17 @@ local enemyTypes = {
     },
 }
 
-local uniqueId = 1
-local Enemy = {}
+local Enemy = { uniqueId = 1 }
 
-function Enemy:new(type, path, speed, reward, health)
+function Enemy:new(type, whichPath, speed, reward, health)
+    local path = App.game.map.paths[whichPath]
     local o = {
         type = type,
-        id = uniqueId,
+        id = tostring(self.uniqueId),
         path = path,
+        whichPath = whichPath,
         pathIndex = 1,
-        position = Utils.deepcopy(path[1]),
+        position = Utils.deepCopy(path[1]),
         speed = speed,
         speedModifier = 1,
         timeToUnfroze = 0,
@@ -208,13 +209,60 @@ function Enemy:new(type, path, speed, reward, health)
         frames = enemyTypes[type].run
     }
 
-    uniqueId = uniqueId + 1
+    self.uniqueId = self.uniqueId + 1
     self.__index = self
     return setmetatable(o, self)
 end
 
 function Enemy:getImage()
     return Utils.imageFromCache(self.frames[self.currentFrame])
+end
+
+function Enemy:serialize()
+    return {
+        type = self.type,
+        id = self.id,
+        whichPath = self.whichPath,
+        pathIndex = self.pathIndex,
+        position = self.position,
+        speed = self.speed,
+        speedModifier = self.speedModifier,
+        timeToUnfroze = self.timeToUnfroze,
+        health = self.health,
+        isDead = self.isDead,
+        reward = self.reward,
+        currentFrame = self.currentFrame,
+        timeSinceFrameChange = self.timeSinceFrameChange
+    }
+end
+
+function Enemy:deserialize(de)
+    local path = App.game.map.paths[de.whichPath]
+    local e = {
+        type = de.type,
+        id = de.id,
+        path = path,
+        whichPath = de.whichPath,
+        pathIndex = de.pathIndex,
+        position = de.position,
+        speed = de.speed,
+        speedModifier = de.speedModifier,
+        timeToUnfroze = de.timeToUnfroze,
+        health = de.health,
+        isDead = de.isDead,
+        reward = de.reward,
+        currentFrame = de.currentFrame,
+        timeSinceFrameChange = de.timeSinceFrameChange
+    }
+
+    if e.isDead then
+        e.frames = enemyTypes[de.type].die
+    else
+        e.frames = enemyTypes[de.type].run
+    end
+
+    self.__index = self
+    return setmetatable(e, self)
 end
 
 function Enemy:update(state, dt)
@@ -274,7 +322,7 @@ function Enemy:update(state, dt)
 
     if reached then
         self.pathIndex = self.pathIndex + 1
-        self.position = Utils.deepcopy(nextPos)
+        self.position = Utils.deepCopy(nextPos)
     end
 end
 

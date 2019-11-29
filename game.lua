@@ -1,38 +1,40 @@
-local Summer = require 'summer'
+local json = require 'json'
+
 local Winter = require 'winter'
+local Summer = require 'summer'
 local Enemy = require 'enemy'
 local Tower = require 'tower'
 local Bullet = require 'bullet'
 local Utils = require 'utils'
-
-local Map = nil
 
 GAME_STATE_PLAYING = 1
 GAME_STATE_WIN = 2
 GAME_STATE_LOSE = 4
 GAME_STATE_PAUSED = 8
 GAME_STATE_STOPPED = 16
+GAME_STATE_SAVING = 32
+GAME_STATE_SETTINGS = 64
+GAME_STATE_OVERWRITE = 128
+
 
 local Game = { state = GAME_STATE_STOPPED }
 
 function Game:pause()
     if self.state == GAME_STATE_PLAYING then
         self.state = GAME_STATE_PAUSED
-        --self:draw_pause() надо отрисовать
     elseif self.state == GAME_STATE_PAUSED then
         self.state = GAME_STATE_PLAYING
     end
 end
 
 function Game:reset()
-    self.tiles = Map.tiles
+    self.tiles = Utils.deepCopy(self.map.tiles)
     self.enemies = {}
     self.towers = {}
     self.bullets = {}
+    self.buttons = {}
     self.timeNow = 0
     self.timeLastSpawn = 0
-    self.wave = 1
-    self.subwave = 0
     self.enemiesToSpawn = 0
     self.spawnedAt = 0
     self.selectedTower = 0
@@ -44,26 +46,126 @@ function Game:reset()
     self.night = os.time() % 2 == 0
 end
 
+function Game:serialize()
+    local g = {
+        mapType = self.mapType,
+        enemies = {},
+        towers = {},
+        bullets = {},
+        timeNow = self.timeNow,
+        timeLastSpawn = self.timeLastSpawn,
+        wave = self.wave,
+        subwave = self.subwave,
+        enemiesToSpawn = self.enemiesToSpawn,
+        spawnedAt = self.spawnedAt,
+        selectedTower = self.selectedTower,
+        state = GAME_STATE_PAUSED,
+        lives = self.lives,
+        money = self.money,
+        night = self.night,
+        enemyId = Enemy.uniqueId,
+        bulletId = Bullet.uniqueId,
+        towerId = Tower.uniqueId
+    }
+
+    for id, enemy in pairs(self.enemies) do
+        g.enemies[id] = enemy:serialize()
+    end
+
+    for id, bullet in pairs(self.bullets) do
+        g.bullets[id] = bullet:serialize()
+    end
+
+    for id, tower in pairs(self.towers) do
+        g.towers[id] = tower:serialize()
+    end
+
+    return g
+end
+
+function Game:saveToFile()
+    local f = love.filesystem.newFile('save.ppg')
+    f:open('w')
+    f:write(json.encode(self:serialize()))
+    f:close()
+end
+
+function Game:loadFromFile()
+    local contents = love.filesystem.read('save.ppg')
+    if contents == nil then
+        return
+    end
+
+    local de = json.decode(contents)
+    self.mapType = de.mapType
+    self:loadMap()
+
+    self.tiles = Utils.deepCopy(self.map.tiles)
+    self.enemies = {}
+    self.towers = {}
+    self.bullets = {}
+    self.timeNow = de.timeNow
+    self.timeLastSpawn = de.timeLastSpawn
+    self.enemiesToSpawn = de.enemiesToSpawn
+    self.spawnedAt = de.spawnedAt
+    self.selectedTower = de.selectedTower
+    self.state = de.state
+    self.wave = de.wave
+    self.subwave = de.subwave
+    self.lives = de.lives
+    self.money = de.money
+    self.night = de.night
+    Enemy.uniqueId = de.enemyId
+    Bullet.uniqueId = de.bulletId
+    Tower.uniqueId = de.towerId
+
+    for id,enemy in pairs(de.enemies) do
+        self.enemies[id] = Enemy:deserialize(enemy)
+    end
+
+    for id,tower in pairs(de.towers) do
+        local t = Tower:deserialize(tower)
+        self.towers[id] = t
+        local x = t.position[1]
+        local y = t.position[2]
+        self.tiles[y][x].tower = t
+    end
+
+    for id,bullet in pairs(de.bullets) do
+        self.bullets[id] = Bullet:deserialize(bullet)
+    end
+end
+
+function Game:loadMap()
+    if self.mapType == 1 then
+        self.map = Summer
+    else
+        self.map = Winter
+    end
+end
+
 function Game:load()
-    Map = App.newgame.mapType
+    self.mapType = App.newgame.mapType
+    self:loadMap()
     self:reset()
+
     musicwar:setLooping(true)
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause2.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause2.png'), fn = function()
         App.game:pause()
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause3.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause3.png'), fn = function()
         App.changeScreen('game')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause4.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause4.png'), fn = function()
         App.changeScreen('settings')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause5.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause5.png'), fn = function()
         musicwar:stop()
         App.changeScreen('savegame')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause.png'), fn = nil })
 end
 
 function Game:update(dt)
@@ -73,16 +175,16 @@ function Game:update(dt)
 
     self.timeNow = self.timeNow + dt
 
-    local wave = Map.waves[self.wave]
+    local wave = self.map.waves[self.wave]
     local subwave = wave[self.subwave]
 
     if self.enemiesToSpawn == 0 then
         if self.subwave < #wave then
             self.subwave = self.subwave + 1
             self.enemiesToSpawn = wave[self.subwave].count
-        elseif self.wave < #Map.waves then
+        elseif self.wave < #self.map.waves then
             self.wave = self.wave + 1
-            wave = Map.waves[self.wave]
+            wave = self.map.waves[self.wave]
             self.timeSinceWaveChange = 0
             self.subwave = 1
             self.enemiesToSpawn = wave[self.subwave].count
@@ -92,9 +194,9 @@ function Game:update(dt)
     subwave = wave[self.subwave]
 
     if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
-        local whichPath = (self.enemiesToSpawn % #Map.paths) + 1
-        local e = Enemy:new(subwave.type, Map.paths[whichPath], subwave.speed, subwave.reward, subwave.health)
-        table.insert(self.enemies, e.id, e)
+        local whichPath = (self.enemiesToSpawn % #self.map.paths) + 1
+        local e = Enemy:new(subwave.type, whichPath, subwave.speed, subwave.reward, subwave.health)
+        self.enemies[e.id] = e
         self.spawnedAt = self.timeNow
         self.enemiesToSpawn = self.enemiesToSpawn - 1
     end
@@ -123,7 +225,7 @@ function Game:update(dt)
         losesound:play()
     end
 
-    if self.wave == #Map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
+    if self.wave == #self.map.waves and self.subwave == #wave and Utils.tableSize(self.enemies) == 0 and self.enemiesToSpawn == 0 then
         self.state = GAME_STATE_WIN
         musicwar:stop()
         winsound:setVolume(App.settings.effectsVolume)
@@ -156,13 +258,13 @@ function Game:drawTiles(mx, my)
                 local top = { u+130, v+141 }
                 local left = { u+65, v+173 }
 
-                if tile.towerable and Utils.pointInRect(top, right, bottom, left, cursor) then
+                if tile.towerable and Utils.pointInRect(top, right, bottom, left, cursor) and self.state == GAME_STATE_PLAYING then
                     love.graphics.setColor(colorHover)
 
                     if App.isMouseDown(1) then
                         if self.selectedTower > 0 and tile.tower == nil then
                             local t = Tower:new(self.selectedTower, {j+1, i+1})
-                            table.insert(self.towers, t.id, t)
+                            self.towers[t.id] = t
                             tile.tower = t
                             self.money = self.money - towerTypes[self.selectedTower].price
                             self.selectedTower = 0
@@ -174,7 +276,7 @@ function Game:drawTiles(mx, my)
                     end
                 end
 
-                love.graphics.draw(tile.image, u, v)
+                love.graphics.draw(tile:getImage(), u, v)
                 love.graphics.setColor(color)
 
                 for _, enemy in pairs(self.enemies) do
@@ -218,7 +320,7 @@ function Game:drawHUD(mx, my)
     love.graphics.draw(Utils.imageFromCache('assets/money.png'), 40 + 40 + 20 + livesWidth + 20, 30)
     love.graphics.print(moneyString, font, 40 + 40 + 20 + livesWidth + 40 + 20 + 20, 25)
 
-    love.graphics.print('Волна ' .. tostring(self.wave) .. '/' .. tostring(#Map.waves), font, 40, App.height - 40 - 64)
+    love.graphics.print('Волна ' .. tostring(self.wave) .. '/' .. tostring(#self.map.waves), font, 40, App.height - 40 - 64)
 
     local seconds_since_start = math.floor(self.timeNow)
     local minutes = math.floor(seconds_since_start / 60)
@@ -292,52 +394,52 @@ function Game:drawHUD(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:draw_win()
+function Game:drawWin()
     local image = Utils.imageFromCache('assets/win.png')
     love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
-function Game:draw_pause(mx, my)
-    --local cx = App.width / 2
-    --local cy = App.height / 2
-    --local cursorY = 0
-    --local hovered = false
+function Game:drawPause(mx, my)
+    local cx = App.width / 2
+    local cy = App.height / 2
+    local cursorY = 0
+    local hovered = false
 
-    --for i = 1,4 do
-        --local btn = self.buttons[i]
-        --local bx = cx - 200 + 24
-        --local by = 2*App.height/5 + cursorY
-        --local mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105    тут крашится
+    for i = 1,4 do
+        local btn = self.buttons[i]
+        local bx = cx - 200 + 24
+        local by = 2*App.height/5 + cursorY
+        local mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105
 
-        --if mouseOver then
-            --love.graphics.draw(btn.image, cx, 2*App.height/5, 0, 1, 1, 0.5*btn.image:getWidth())
-            --hovered = true
-            --if App.isMouseDown(1) then
-                --btn.fn()
-            --end
-        --end
+        if mouseOver then
+            love.graphics.draw(btn.image, cx, cy, 0, 1, 1, 0.5*btn.image:getWidth(), 0.5*btn.image:getHeight())
+            hovered = true
+            if App.isMouseDown(1) then
+                btn.fn()
+            end
+        end
 
-        --cursorY = cursorY + 147
-    --end
+        cursorY = cursorY + 147
+    end
 
-    --if not hovered then
-        --love.graphics.draw(self.buttons[5].image, cx, 2*App.height/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
-    --end
+    if not hovered then
+        love.graphics.draw(self.buttons[5].image, cx, cy, 0, 1, 1, 0.5*self.buttons[1].image:getWidth(), 0.5*self.buttons[1].image:getHeight())
+    end
 end
 
-function Game:draw_lose()
+function Game:drawLose()
     local image = Utils.imageFromCache('assets/lose.png')
     love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
-function Game:draw_results()
+function Game:drawResults()
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
     if self.state == GAME_STATE_WIN then
-        self:draw_win()
+        self:drawWin()
     elseif self.state == GAME_STATE_LOSE then
-        self:draw_lose()
+        self:drawLose()
     end
 
     love.graphics.setColor({r, g, b, a})
@@ -356,17 +458,19 @@ function Game:drawAll(mx, my)
 end
 
 function Game:draw(mx, my)
-    if self.state ~= GAME_STATE_PLAYING then
-        blurEffect(function()
-            self:drawAll(mx, my)
-        end)
-    else
-        self:drawAll(mx, my)
+    self:drawAll(mx, my)
+
+    if self.state == GAME_STATE_PAUSED then
+        self:drawPause(mx, my)
     end
 
     if self.state == GAME_STATE_WIN or self.state == GAME_STATE_LOSE then
-        self:draw_results()
+        self:drawResults()
     end
+
+    love.graphics.print(tostring(Enemy.uniqueId), 0, 0)
+    love.graphics.print(tostring(Bullet.uniqueId), 0, 15)
+    love.graphics.print(tostring(Tower.uniqueId), 0, 30)
 end
 
 return Game

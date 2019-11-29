@@ -6,20 +6,59 @@ local bulletTypes = {
     'assets/bolt.png'
 }
 
-local uniqueId = 1
-local Bullet = {}
+local Bullet = { uniqueId = 1 }
 
 function Bullet:new(tower, enemy)
     local b = {
-        id = uniqueId,
-        image = Utils.imageFromCache(bulletTypes[tower.type]),
-        position = Utils.deepcopy(tower.position),
+        id = tostring(self.uniqueId),
+        image = bulletTypes[tower.type],
+        position = Utils.deepCopy(tower.position),
         tower = tower,
         target = enemy,
         rotation = 0
     }
 
-    uniqueId = uniqueId + 1
+    self.uniqueId = self.uniqueId + 1
+    self.__index = self
+    return setmetatable(b, self)
+end
+
+function Bullet:getImage()
+    self:turn()
+    return Utils.imageFromCache(self.image)
+end
+
+function Bullet:serialize()
+    local b = {
+        id = self.id,
+        image = self.image,
+        position = self.position,
+        rotation = self.rotation
+    }
+
+    if self.tower ~= nil then
+        b.tower = self.tower.id
+    end
+
+    if self.target ~= nil then
+        b.target = self.target.id
+    end
+
+    return b
+end
+
+function Bullet:deserialize(de)
+    local tower = App.game.towers[de.tower]
+
+    local b = {
+        id = de.id,
+        image = bulletTypes[tower.type],
+        position = Utils.deepCopy(tower.position),
+        tower = tower,
+        target = tower.target,
+        rotation = de.rotation
+    }
+
     self.__index = self
     return setmetatable(b, self)
 end
@@ -46,11 +85,6 @@ function Bullet:update(state, dt)
         end
         self:destroy(state)
     end
-end
-
-function Bullet:getImage()
-    self:turn()
-    return self.image
 end
 
 function Bullet:draw()

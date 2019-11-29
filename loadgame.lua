@@ -3,11 +3,11 @@ local Utils = require 'utils'
 local Loadgame = { buttons = {} }
 
 function Loadgame:load()
-    logo = Utils.imageFromCache("assets/logo.png")
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/loadgame/loadgame2.png"), fn = function()
+    logo = Utils.imageFromCache('assets/logo.png')
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/loadgame/loadgame2.png'), fn = function()
         App.changeScreen('menu')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/loadgame/loadgame.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/loadgame/loadgame.png'), fn = nil })
 end
 
 function Loadgame:update(dt)
@@ -20,7 +20,7 @@ function Loadgame:draw(mx, my)
     local cy = App.height / 2
 
     love.graphics.draw(logo, cx, App.height/5, 0, 1.5*cx/logo:getWidth(), 1.5*cx/logo:getWidth(), 0.5*logo:getWidth(), 0.5*logo:getHeight())
-    
+
     local hovered = false
     local bx = cx - 180
     local by = cy + 60

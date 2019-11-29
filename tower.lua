@@ -43,12 +43,11 @@ towerTypes = {
     }
 }
 
-local uniqueId = 1
-local Tower = {}
+local Tower = { uniqueId = 1 }
 
 function Tower:new(type, position)
     local o = {
-        id = uniqueId,
+        id = tostring(self.uniqueId),
         data = towerTypes[type],
         target = nil,
         lastShotAt = 0,
@@ -56,12 +55,49 @@ function Tower:new(type, position)
         rotation = 1,
         type = type
     }
+
     build:setLooping(false)
     build:setVolume(App.settings.effectsVolume)
     build:play()
-    uniqueId = uniqueId + 1
+
+    self.uniqueId = self.uniqueId + 1
     self.__index = self
     return setmetatable(o, self)
+end
+
+function Tower:getImage()
+    return Utils.imageFromCache(self.data.images[self.rotation])
+end
+
+function Tower:serialize()
+    local t = {
+        id = self.id,
+        lastShotAt = self.lastShotAt,
+        position = self.position,
+        rotation = self.rotation,
+        type = self.type
+    }
+
+    if self.target ~= nil then
+        t.target = self.target.id
+    end
+
+    return t
+end
+
+function Tower:deserialize(de)
+    local t = {
+        id = de.id,
+        data = towerTypes[de.type],
+        target = App.game.enemies[de.target],
+        lastShotAt = de.lastShotAt,
+        position = de.position,
+        rotation = de.rotation,
+        type = de.type
+    }
+
+    self.__index = self
+    return setmetatable(t, self)
 end
 
 function Tower:turnToTarget()
@@ -79,10 +115,6 @@ function Tower:turnToTarget()
     else
         self.rotation = 4
     end
-end
-
-function Tower:getImage()
-    return Utils.imageFromCache(self.data.images[self.rotation])
 end
 
 function Tower:getAttackRange()
@@ -132,7 +164,7 @@ function Tower:update(state, dt)
             self.data.shot:setVolume(App.settings.effectsVolume)
             self.data.shot:play()
             local b = Bullet:new(self, self.target)
-            table.insert(state.bullets, b.id, b)
+            state.bullets[b.id] = b
         end
     end
 

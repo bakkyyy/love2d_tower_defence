@@ -5,25 +5,25 @@ local Utils = require 'utils'
 local Newgame = { buttons = {}, mapType = nil }
 
 function Newgame:load()
-    logo = Utils.imageFromCache("assets/logo.png")
+    logo = Utils.imageFromCache('assets/logo.png')
 
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame3.png"), fn = function()
-        self.mapType = Summer
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/newgame/newgame3.png'), fn = function()
+        self.mapType = 1
         App.changeScreen('game')
         music:stop()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame2.png"), fn = function()
-        self.mapType = Winter
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/newgame/newgame2.png'), fn = function()
+        self.mapType = 2
         App.changeScreen('game')
         music:stop()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame4.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/newgame/newgame4.png'), fn = function()
         App.changeScreen('menu')
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/newgame/newgame.png'), fn = nil })
 end
 
 function Newgame:update(dt)

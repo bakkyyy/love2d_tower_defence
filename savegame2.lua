@@ -3,18 +3,18 @@ local Utils = require 'utils'
 local Savegame2 = { buttons = {} }
 
 function Savegame2:load()
-    logo = Utils.imageFromCache("assets/logo.png")
+    logo = Utils.imageFromCache('assets/logo.png')
     local fex = file_exists('save.bin')
     music:play()
 
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/savegame/savegame5.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame5.png'), fn = function()
         --save
         App.changeScreen('menu')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/savegame/savegame6.png"), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame6.png'), fn = function()
         App.changeScreen('menu')
     end })
-    table.insert(self.buttons, {image = Utils.imageFromCache("assets/savegame/savegame4.png"), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame4.png'), fn = nil })
 end
 
 function Savegame2:update(dt)

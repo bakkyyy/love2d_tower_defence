@@ -18,15 +18,15 @@ end
 
 local function gradientMesh(dir, ...)
     local isHorizontal = true
-    if dir == "vertical" then
+    if dir == 'vertical' then
         isHorizontal = false
-    elseif dir ~= "horizontal" then
+    elseif dir ~= 'horizontal' then
         error("bad argument #1 to 'gradient' (invalid value)", 2)
     end
 
-    local colorLen = select("#", ...)
+    local colorLen = select('#', ...)
     if colorLen < 2 then
-        error("color list is less than two", 2)
+        error('color list is less than two', 2)
     end
 
     local meshData = {}
@@ -48,23 +48,10 @@ local function gradientMesh(dir, ...)
         end
     end
 
-    return love.graphics.newMesh(meshData, "strip", "static")
+    return love.graphics.newMesh(meshData, 'strip', 'static')
 end
 
-local function dump(o)
-    if type(o) == 'table' then
-        local s = '{ '
-        for k,v in pairs(o) do
-            if type(k) ~= 'number' then k = '"'..k..'"' end
-            s = s .. '['..k..'] = ' .. dump(v) .. ','
-        end
-        return s .. '}\n'
-    else
-        return tostring(o)
-    end
- end
-
- local function deepcopy(orig, copies)
+local function deepCopy(orig, copies)
     copies = copies or {}
     local orig_type = type(orig)
     local copy
@@ -74,9 +61,9 @@ local function dump(o)
         else
             copy = {}
             copies[orig] = copy
-            setmetatable(copy, deepcopy(getmetatable(orig), copies))
+            setmetatable(copy, deepCopy(getmetatable(orig), copies))
             for orig_key, orig_value in next, orig, nil do
-                copy[deepcopy(orig_key, copies)] = deepcopy(orig_value, copies)
+                copy[deepCopy(orig_key, copies)] = deepCopy(orig_value, copies)
             end
         end
     else
@@ -122,14 +109,18 @@ local function tableSize(t)
     return s
 end
 
+local function fileExists(name)
+    return love.filesystem.getInfo(name, 'file') ~= nil
+end
+
 return {
     imageFromCache = imageFromCache,
     audioFromCache = audioFromCache,
     gradientMesh = gradientMesh,
-    dump = dump,
-    deepcopy = deepcopy,
+    deepCopy = deepCopy,
     removeByKey = removeByKey,
     pointInRect = pointInRect,
     clamp = clamp,
-    tableSize = tableSize
+    tableSize = tableSize,
+    fileExists = fileExists
 }
