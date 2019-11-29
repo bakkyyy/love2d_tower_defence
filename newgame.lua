@@ -12,14 +12,17 @@ function Newgame:load()
         App.changeScreen('game')
         music:stop()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame2.png"), fn = function()
         self.mapType = Winter
         App.changeScreen('game')
         music:stop()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame4.png"), fn = function()
         App.changeScreen('menu')
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/newgame/newgame.png"), fn = nil })
 end
 

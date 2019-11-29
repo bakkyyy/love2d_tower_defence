@@ -68,7 +68,7 @@ function love.keypressed(key, scancode, isrepeat)
     end
 
     if App._current == App.game and (App.game.state == GAME_STATE_WIN or App.game.state == GAME_STATE_LOSE) then
-        App.game.state = GAME_STATE_STOPED
+        App.game.state = GAME_STATE_STOPPED
         App.changeScreen('menu')
     end
 end

@@ -11,24 +11,9 @@ GAME_STATE_PLAYING = 1
 GAME_STATE_WIN = 2
 GAME_STATE_LOSE = 4
 GAME_STATE_PAUSED = 8
-GAME_STATE_STOPED = 16
+GAME_STATE_STOPPED = 16
 
-local Game = {
-    enemies = {},
-    towers = {},
-    bullets = {},
-    timeNow = 0,
-    timeLastSpawn = 0,
-    wave = 1,
-    subwave = 0,
-    enemiesToSpawn = 0,
-    spawnedAt = 0,
-    selectedTower = 0,
-    state = GAME_STATE_PLAYING,
-    lives = 20,
-    money = 72,
-    night = os.time() % 2 == 0
-}
+local Game = { state = GAME_STATE_STOPPED }
 
 function Game:pause()
     if self.state == GAME_STATE_PLAYING then
@@ -38,9 +23,29 @@ function Game:pause()
     end
 end
 
+function Game:reset()
+    self.tiles = Map.tiles
+    self.enemies = {}
+    self.towers = {}
+    self.bullets = {}
+    self.timeNow = 0
+    self.timeLastSpawn = 0
+    self.wave = 1
+    self.subwave = 0
+    self.enemiesToSpawn = 0
+    self.spawnedAt = 0
+    self.selectedTower = 0
+    self.state = GAME_STATE_PLAYING
+    self.wave = 1
+    self.subwave = 0
+    self.lives = 20
+    self.money = 72
+    self.night = os.time() % 2 == 0
+end
+
 function Game:load()
     Map = App.newgame.mapType
-    self.tiles = Map.tiles
+    self:reset()
     musicwar:setLooping(true)
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
