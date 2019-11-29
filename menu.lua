@@ -2,14 +2,25 @@ local Utils = require 'utils'
 
 local Menu = { buttons = {} }
 
+function file_exists(name)
+    local f = io.open(name,"r")
+    if f~=nil then 
+        io.close(f)  
+    --else love.graphics.rectangle('line', 50, 50, 150, 150)
+    end
+ end
+
 function Menu:load()
     logo = Utils.imageFromCache("assets/logo.png")
+    local fex = file_exists('save.bin')
     
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu2.png"), fn = function()
         App.changeScreen('newgame')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu3.png"), fn = function()
-        App.changeScreen('loadgame')
+        if not fex then
+            App.changeScreen('loadgame')
+        end
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache("assets/menu/menu4.png"), fn = function()
         App.changeScreen('settings')

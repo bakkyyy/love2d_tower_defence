@@ -18,6 +18,7 @@ local Game = { state = GAME_STATE_STOPPED }
 function Game:pause()
     if self.state == GAME_STATE_PLAYING then
         self.state = GAME_STATE_PAUSED
+        --self:draw_pause() надо отрисовать
     elseif self.state == GAME_STATE_PAUSED then
         self.state = GAME_STATE_PLAYING
     end
@@ -49,6 +50,20 @@ function Game:load()
     musicwar:setLooping(true)
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause2.png"), fn = function()
+        App.game:pause()
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause3.png"), fn = function()
+        App.changeScreen('game')
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause4.png"), fn = function()
+        App.changeScreen('settings')
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause5.png"), fn = function()
+        musicwar:stop()
+        App.changeScreen('savegame')
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache("assets/pause/pause.png"), fn = nil })
 end
 
 function Game:update(dt)
@@ -280,6 +295,34 @@ end
 function Game:draw_win()
     local image = Utils.imageFromCache('assets/win.png')
     love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
+end
+
+function Game:draw_pause(mx, my)
+    --local cx = App.width / 2
+    --local cy = App.height / 2
+    --local cursorY = 0
+    --local hovered = false
+
+    --for i = 1,4 do
+        --local btn = self.buttons[i]
+        --local bx = cx - 200 + 24
+        --local by = 2*App.height/5 + cursorY
+        --local mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105    тут крашится
+
+        --if mouseOver then
+            --love.graphics.draw(btn.image, cx, 2*App.height/5, 0, 1, 1, 0.5*btn.image:getWidth())
+            --hovered = true
+            --if App.isMouseDown(1) then
+                --btn.fn()
+            --end
+        --end
+
+        --cursorY = cursorY + 147
+    --end
+
+    --if not hovered then
+        --love.graphics.draw(self.buttons[5].image, cx, 2*App.height/5, 0, 1, 1, 0.5*self.buttons[1].image:getWidth())
+    --end
 end
 
 function Game:draw_lose()
