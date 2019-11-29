@@ -12,17 +12,20 @@ function file_exists(name)
 
 function Menu:load()
     logo = Utils.imageFromCache('assets/logo.png')
-    local fex = file_exists('save.bin')
-
+    
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu2.png'), fn = function()
         App.changeScreen('newgame')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu3.png'), fn = function()
-        -- if not fex then
-        --     App.changeScreen('loadgame')
-        -- end
-        App.changeScreen('game')
-        App.game:loadFromFile()
+        local info = love.filesystem.read('save.ppg')
+        
+        if info ~= nil then
+            music:stop()
+            App.changeScreen('game')
+            App.game:loadFromFile()
+        else App.changeScreen('loadgame')
+        end
+        
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/menu4.png'), fn = function()
         App.changeScreen('settings')
@@ -39,10 +42,11 @@ function Menu:update(dt)
 end
 
 function Menu:draw(mx, my)
+    love.graphics.setColor({1, 1, 1})
     love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
 
     local cx = App.width / 2
-    local cy = App.height / 2
+    local cy = App.height / 2        
 
     love.graphics.draw(logo, cx, App.height/5, 0, 1.5*cx/logo:getWidth(), 1.5*cx/logo:getWidth(), 0.5*logo:getWidth(), 0.5*logo:getHeight())
 

@@ -22,8 +22,12 @@ local Game = { state = GAME_STATE_STOPPED }
 function Game:pause()
     if self.state == GAME_STATE_PLAYING then
         self.state = GAME_STATE_PAUSED
+        musicwar:setVolume(0.5*App.settings.musicVolume)
+        click:play()
     elseif self.state == GAME_STATE_PAUSED then
         self.state = GAME_STATE_PLAYING
+        musicwar:setVolume(App.settings.musicVolume)
+        click:play()
     end
 end
 
@@ -156,16 +160,61 @@ function Game:load()
         App.game:pause()
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause3.png'), fn = function()
+        click:play()
         App.changeScreen('game')
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause4.png'), fn = function()
-        App.changeScreen('settings')
+        click:play()
+        self.state = GAME_STATE_SETTINGS
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause5.png'), fn = function()
-        musicwar:stop()
-        App.changeScreen('savegame')
+        click:play()
+        self.state = GAME_STATE_SAVING
+        --love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end })
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause.png'), fn = nil })
+    --для настроек паузы
+    mc = Utils.imageFromCache('assets/settings/scroll.png')
+    ec = Utils.imageFromCache('assets/settings/scroll.png')
+
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/settings/pause_settings2.png'), fn = function()
+        click:play()
+        self.state = GAME_STATE_PAUSED
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/settings/pause_settings.png'), fn = nil })
+    --для сохранения
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame2.png'), fn = function()
+        click:play()
+        local info = love.filesystem.read('save.ppg')
+        if info ~= nil then
+            self.state = GAME_STATE_OVERWRITE 
+        else 
+            App.game:saveToFile()
+            musicwar:stop()
+            App.changeScreen('menu')
+            music:play()
+        end
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame3.png'), fn = function()
+        musicwar:stop()
+        App.changeScreen('menu')
+        music:play()
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame.png'), fn = nil })
+    --для перезаписи
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame5.png'), fn = function()
+        click:play()
+        App.game:saveToFile()
+        musicwar:stop()
+        App.changeScreen('menu')
+        music:play()
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame6.png'), fn = function()
+        musicwar:stop()
+        App.changeScreen('menu')
+        music:play()
+    end })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame4.png'), fn = nil })
 end
 
 function Game:update(dt)
@@ -394,12 +443,10 @@ function Game:drawHUD(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:drawWin()
-    local image = Utils.imageFromCache('assets/win.png')
-    love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
-end
-
 function Game:drawPause(mx, my)
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor({1, 1, 1})
+
     local cx = App.width / 2
     local cy = App.height / 2
     local cursorY = 0
@@ -407,9 +454,9 @@ function Game:drawPause(mx, my)
 
     for i = 1,4 do
         local btn = self.buttons[i]
-        local bx = cx - 200 + 24
-        local by = 2*App.height/5 + cursorY
-        local mouseOver = bx < mx and mx < bx + 360 and by < my and my < by + 105
+        local bx = cx - 195 + 24
+        local by = cy - 192 + cursorY
+        local mouseOver = bx < mx and mx < bx + 355 and by < my and my < by + 110
 
         if mouseOver then
             love.graphics.draw(btn.image, cx, cy, 0, 1, 1, 0.5*btn.image:getWidth(), 0.5*btn.image:getHeight())
@@ -419,12 +466,19 @@ function Game:drawPause(mx, my)
             end
         end
 
-        cursorY = cursorY + 147
+        cursorY = cursorY + 110
     end
 
     if not hovered then
         love.graphics.draw(self.buttons[5].image, cx, cy, 0, 1, 1, 0.5*self.buttons[1].image:getWidth(), 0.5*self.buttons[1].image:getHeight())
     end
+
+    love.graphics.setColor({r, g, b, a})
+end
+
+function Game:drawWin()
+    local image = Utils.imageFromCache('assets/win.png')
+    love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
 function Game:drawLose()
@@ -436,10 +490,149 @@ function Game:drawResults()
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
+    
     if self.state == GAME_STATE_WIN then
         self:drawWin()
     elseif self.state == GAME_STATE_LOSE then
         self:drawLose()
+    end
+
+    love.graphics.setColor({r, g, b, a})
+end
+
+function Game:drawSettings(mx, my)
+    local r, g, b, a = love.graphics.getColor()
+    love.graphics.setColor({1, 1, 1})
+    local cx = App.width / 2
+    local cy = App.height / 2
+    local hovered = false
+    local bx = cx - 195 + 24
+    local by = cy + 135
+    local mouseOver = bx < mx and mx < bx + 355 and by < my and my < by + 110
+
+    if mouseOver then
+        love.graphics.draw(self.buttons[6].image, cx, cy, 0, 1, 1, 0.5*self.buttons[1].image:getWidth(), 0.5*self.buttons[1].image:getHeight())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[6].fn()
+        end
+    end
+
+    if not hovered then
+        love.graphics.draw(self.buttons[7].image, cx, cy, 0, 1, 1, 0.5*self.buttons[1].image:getWidth(), 0.5*self.buttons[1].image:getHeight())
+    end
+
+    local hovered = false
+    local msx = cx - 135
+    local msy = cy - 80
+    local mouseOver = msx - 10 < mx and mx < msx + 290 + 10 and msy < my and my < msy + 20
+    if mouseOver and love.mouse.isDown(1) then
+        local ox = msx + 290 - mx
+        App.settings.musicVolume = 1 - (ox/(290))
+        if App.settings.musicVolume < 0.001 then App.settings.musicVolume = 0
+        elseif App.settings.musicVolume > 0.99 then App.settings.musicVolume = 1
+        end
+        music:setVolume(App.settings.musicVolume)
+        musicwar:setVolume(App.settings.musicVolume)
+    end
+    --love.graphics.print(App.settings.musicVolume, font, cx+200, cy - 0.25*cy)
+    --love.graphics.print({msx + 1.5*scroll:getWidth(), mx})
+    --love.graphics.rectangle('line', msx, msy, 290, 20)
+    --love.graphics.rectangle('line', msx - 135  + (100*App.settings.musicVolume/290), msy - 80, 290, 20)--msx - 135, msy - 80, 290, 20)
+    --love.graphics.draw(mc, cx - 3*scroll:getWidth()/4 + 1.5*scroll:getWidth() * (1 - self.musicVolume), App.height/2.20, 0, 1.5, 1.5)
+    love.graphics.draw(mc, msx + (App.settings.musicVolume*290*0.98), msy - 12, 0)
+    
+    local esx = cx - 135
+    local esy = cy + 72
+    local mouseOver = esx - 10 < mx and mx < esx + 290 + 10 and esy < my and my < esy + 20
+    if mouseOver and love.mouse.isDown(1) then
+        local ax = esx + 290 - mx
+        App.settings.effectsVolume = 1 - (ax/(290))
+        if App.settings.effectsVolume < 0.001 then App.settings.effectsVolume = 0
+        elseif App.settings.effectsVolume > 0.99 then App.settings.effectsVolume = 1
+        end
+        click:setVolume(App.settings.effectsVolume)
+        build:setVolume(App.settings.effectsVolume)
+    end
+    
+    love.graphics.draw(ec, esx + (App.settings.effectsVolume*290*0.98), esy - 12, 0)
+
+    love.graphics.setColor({r, g, b, a})
+end
+
+function Game:drawSaving(mx, my)
+    local r, g, b, a = love.graphics.getColor()
+
+    love.graphics.setColor({1, 1, 1})
+    
+    local cx = App.width / 2
+    local cy = App.height / 2
+    local hovered = false
+    local bx1 = cx - 250
+    local by1 = cy + 50
+    local bx2 = cx + 50
+    local by2 = cy + 50
+    
+    mouseOver1 = bx1 < mx and mx < bx1 + 206 and by1 < my and my < by1 + 86
+    mouseOver2 = bx2 < mx and mx < bx2 + 206 and by2 < my and my < by2 + 86
+    
+    if mouseOver1 then
+        love.graphics.draw(self.buttons[8].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[8].image:getWidth())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[8].fn()
+        end
+    end
+
+    if mouseOver2 then
+        love.graphics.draw(self.buttons[9].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[8].image:getWidth())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[9].fn()
+        end
+    end
+
+    if not hovered then
+        love.graphics.draw(self.buttons[10].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[8].image:getWidth())
+    end
+
+    love.graphics.setColor({r, g, b, a})
+end
+
+function Game:drawOverWr(mx, my)
+    local r, g, b, a = love.graphics.getColor()
+
+    love.graphics.setColor({1, 1, 1})
+    
+    local cx = App.width / 2
+    local cy = App.height / 2
+    local hovered = false
+    local bx1 = cx - 250
+    local by1 = cy + 50
+    local bx2 = cx + 50
+    local by2 = cy + 50
+    
+    mouseOver1 = bx1 < mx and mx < bx1 + 206 and by1 < my and my < by1 + 86
+    mouseOver2 = bx2 < mx and mx < bx2 + 206 and by2 < my and my < by2 + 86
+    
+    if mouseOver1 then
+        love.graphics.draw(self.buttons[11].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[11].image:getWidth())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[11].fn()
+        end
+    end
+
+    if mouseOver2 then
+        love.graphics.draw(self.buttons[12].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[11].image:getWidth())
+        hovered = true
+        if App.isMouseDown(1) then
+            self.buttons[12].fn()
+        end
+    end
+
+    if not hovered then
+        love.graphics.draw(self.buttons[13].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[11].image:getWidth())
     end
 
     love.graphics.setColor({r, g, b, a})
@@ -464,13 +657,21 @@ function Game:draw(mx, my)
         self:drawPause(mx, my)
     end
 
+    if self.state == GAME_STATE_SAVING then
+        self:drawSaving(mx, my)
+    end
+
+    if self.state == GAME_STATE_OVERWRITE then
+        self:drawOverWr(mx, my)
+    end
+
+    if self.state == GAME_STATE_SETTINGS then
+        self:drawSettings(mx, my)
+    end
+
     if self.state == GAME_STATE_WIN or self.state == GAME_STATE_LOSE then
         self:drawResults()
     end
-
-    love.graphics.print(tostring(Enemy.uniqueId), 0, 0)
-    love.graphics.print(tostring(Bullet.uniqueId), 0, 15)
-    love.graphics.print(tostring(Tower.uniqueId), 0, 30)
 end
 
 return Game

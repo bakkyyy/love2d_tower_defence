@@ -37,9 +37,12 @@ function Settings:draw(mx, my)
     if mouseOver and love.mouse.isDown(1) then
         local ox = msx + 1.5*scroll:getWidth() - mx
         self.musicVolume = 1 - (ox/(1.5*scroll:getWidth()))
+        if self.musicVolume < 0.001 then self.musicVolume = 0
+        elseif self.musicVolume > 0.99 then self.musicVolume = 1
+        end
         music:setVolume(App.settings.musicVolume)
-        --love.graphics.print(self.musicVolume, font, cx+200, cy - 0.25*cy)
     end
+    --love.graphics.print(self.musicVolume, font, cx+200, cy - 0.25*cy)
     --love.graphics.print({msx + 1.5*scroll:getWidth(), mx})
     --love.graphics.rectangle('line', msx, msy, 1.5*scroll:getWidth(), 1.5*scroll:getHeight())
     --love.graphics.draw(mc, cx - 3*scroll:getWidth()/4 + 1.5*scroll:getWidth() * (1 - self.musicVolume), App.height/2.20, 0, 1.5, 1.5)
@@ -51,10 +54,13 @@ function Settings:draw(mx, my)
 
     local esx = cx - 1.5*0.5*scroll:getWidth()
     local esy = 3.25*App.height/5 -12
-    local mouseOver = esx < mx and mx < esx + 1.5*scroll:getWidth() and esy < my and my < esy + 1.5*scroll:getHeight()
+    local mouseOver = esx - 10 < mx and mx < esx + 1.5*scroll:getWidth() + 10 and esy < my and my < esy + 1.5*scroll:getHeight()
     if mouseOver and love.mouse.isDown(1) then
         local ax = esx + 1.5*scroll:getWidth() - mx
         self.effectsVolume = 1 - (ax/(1.5*scroll:getWidth()))
+        if self.effectsVolume < 0.001 then self.effectsVolume = 0
+        elseif self.effectsVolume > 0.99 then self.effectsVolume = 1
+        end
         click:setVolume(App.settings.effectsVolume)
         build:setVolume(App.settings.effectsVolume)
     end
