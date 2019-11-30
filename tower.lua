@@ -10,7 +10,7 @@ towerTypes = {
             'assets/actors/weapon_crystals_N.png'
         },
         price = 60,
-        attackRange = 2,
+        attackRange = 2.05,
         attackInterval = 1,
         damage = 1,
         shot = Utils.audioFromCache('Snow.mp3')
@@ -23,7 +23,7 @@ towerTypes = {
             'assets/actors/weapon_cannon_S.png'
         },
         price = 80,
-        attackRange = 2,
+        attackRange = 2.05,
         attackInterval = 2.75,
         damage = 25,
         shot = Utils.audioFromCache('Cannon.mp3')
@@ -36,7 +36,7 @@ towerTypes = {
             'assets/actors/weapon_ballista_S.png'
         },
         price = 48,
-        attackRange = 2,
+        attackRange = 2.05,
         attackInterval = 1.25,
         damage = 7.5,
         shot = Utils.audioFromCache('Arrow.mp3')

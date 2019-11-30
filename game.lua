@@ -156,24 +156,30 @@ function Game:load()
     musicwar:setLooping(true)
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause2.png'), fn = function()
         App.game:pause()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause3.png'), fn = function()
         click:play()
         App.changeScreen('game')
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause4.png'), fn = function()
         click:play()
         self.state = GAME_STATE_SETTINGS
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause5.png'), fn = function()
         click:play()
         self.state = GAME_STATE_SAVING
         --love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause.png'), fn = nil })
     --для настроек паузы
+
     mc = Utils.imageFromCache('assets/settings/scroll.png')
     ec = Utils.imageFromCache('assets/settings/scroll.png')
 
@@ -181,39 +187,46 @@ function Game:load()
         click:play()
         self.state = GAME_STATE_PAUSED
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/settings/pause_settings.png'), fn = nil })
+
     --для сохранения
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame2.png'), fn = function()
         click:play()
-        local info = love.filesystem.read('save.ppg')
-        if info ~= nil then
-            self.state = GAME_STATE_OVERWRITE 
-        else 
-            App.game:saveToFile()
+        if Utils.fileExists('save.ppg') then
+            self.state = GAME_STATE_OVERWRITE
+        else
+            self:saveToFile()
             musicwar:stop()
             App.changeScreen('menu')
             music:play()
         end
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame3.png'), fn = function()
         musicwar:stop()
         App.changeScreen('menu')
         music:play()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame.png'), fn = nil })
     --для перезаписи
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame5.png'), fn = function()
         click:play()
-        App.game:saveToFile()
+        self:saveToFile()
         musicwar:stop()
         App.changeScreen('menu')
         music:play()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame6.png'), fn = function()
         musicwar:stop()
         App.changeScreen('menu')
         music:play()
     end })
+
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame4.png'), fn = nil })
 end
 
@@ -490,7 +503,7 @@ function Game:drawResults()
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
-    
+
     if self.state == GAME_STATE_WIN then
         self:drawWin()
     elseif self.state == GAME_STATE_LOSE then
@@ -541,7 +554,7 @@ function Game:drawSettings(mx, my)
     --love.graphics.rectangle('line', msx - 135  + (100*App.settings.musicVolume/290), msy - 80, 290, 20)--msx - 135, msy - 80, 290, 20)
     --love.graphics.draw(mc, cx - 3*scroll:getWidth()/4 + 1.5*scroll:getWidth() * (1 - self.musicVolume), App.height/2.20, 0, 1.5, 1.5)
     love.graphics.draw(mc, msx + (App.settings.musicVolume*290*0.98), msy - 12, 0)
-    
+
     local esx = cx - 135
     local esy = cy + 72
     local mouseOver = esx - 10 < mx and mx < esx + 290 + 10 and esy < my and my < esy + 20
@@ -554,7 +567,7 @@ function Game:drawSettings(mx, my)
         click:setVolume(App.settings.effectsVolume)
         build:setVolume(App.settings.effectsVolume)
     end
-    
+
     love.graphics.draw(ec, esx + (App.settings.effectsVolume*290*0.98), esy - 12, 0)
 
     love.graphics.setColor({r, g, b, a})
@@ -564,7 +577,7 @@ function Game:drawSaving(mx, my)
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
-    
+
     local cx = App.width / 2
     local cy = App.height / 2
     local hovered = false
@@ -572,10 +585,10 @@ function Game:drawSaving(mx, my)
     local by1 = cy + 50
     local bx2 = cx + 50
     local by2 = cy + 50
-    
+
     mouseOver1 = bx1 < mx and mx < bx1 + 206 and by1 < my and my < by1 + 86
     mouseOver2 = bx2 < mx and mx < bx2 + 206 and by2 < my and my < by2 + 86
-    
+
     if mouseOver1 then
         love.graphics.draw(self.buttons[8].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[8].image:getWidth())
         hovered = true
@@ -603,7 +616,7 @@ function Game:drawOverWr(mx, my)
     local r, g, b, a = love.graphics.getColor()
 
     love.graphics.setColor({1, 1, 1})
-    
+
     local cx = App.width / 2
     local cy = App.height / 2
     local hovered = false
@@ -611,10 +624,10 @@ function Game:drawOverWr(mx, my)
     local by1 = cy + 50
     local bx2 = cx + 50
     local by2 = cy + 50
-    
+
     mouseOver1 = bx1 < mx and mx < bx1 + 206 and by1 < my and my < by1 + 86
     mouseOver2 = bx2 < mx and mx < bx2 + 206 and by2 < my and my < by2 + 86
-    
+
     if mouseOver1 then
         love.graphics.draw(self.buttons[11].image, cx, cy - 175, 0, 1, 1, 0.5*self.buttons[11].image:getWidth())
         hovered = true
