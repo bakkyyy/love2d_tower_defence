@@ -1,191 +1,7 @@
 local Utils = require 'utils'
 
-local enemyTypes = {
-    {
-        run = {
-            'assets/actors/animation/1/run/6_enemies_1_run_000.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_001.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_002.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_003.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_004.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_005.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_006.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_007.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_008.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_009.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_010.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_011.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_012.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_013.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_014.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_015.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_016.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_017.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_018.png',
-            'assets/actors/animation/1/run/6_enemies_1_run_019.png'
-        },
-        die = {
-            'assets/actors/animation/1/die/6_enemies_1_die_000.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_001.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_002.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_003.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_004.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_005.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_006.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_007.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_008.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_009.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_010.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_011.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_012.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_013.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_014.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_015.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_016.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_017.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_018.png',
-            'assets/actors/animation/1/die/6_enemies_1_die_019.png'
-        }
-    },
-    {
-        run = {
-            'assets/actors/animation/2/run/2_enemies_1_run_000.png',
-            'assets/actors/animation/3/run/2_enemies_1_run_001.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_002.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_003.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_004.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_005.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_006.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_007.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_008.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_009.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_010.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_011.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_012.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_013.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_014.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_015.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_016.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_017.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_018.png',
-            'assets/actors/animation/2/run/2_enemies_1_run_019.png'
-        },
-        die = {
-            'assets/actors/animation/2/die/2_enemies_1_die_000.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_001.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_002.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_003.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_004.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_005.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_006.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_007.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_008.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_009.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_010.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_011.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_012.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_013.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_014.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_015.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_016.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_017.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_018.png',
-            'assets/actors/animation/2/die/2_enemies_1_die_019.png'
-        }
-    },
-    {
-        run = {
-            'assets/actors/animation/3/run/3_enemies_1_run_000.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_001.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_002.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_003.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_004.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_005.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_006.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_007.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_008.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_009.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_010.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_011.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_012.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_013.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_014.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_015.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_016.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_017.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_018.png',
-            'assets/actors/animation/3/run/3_enemies_1_run_019.png'
-        },
-        die = {
-            'assets/actors/animation/3/die/3_enemies_1_die_000.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_001.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_002.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_003.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_004.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_005.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_006.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_007.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_008.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_009.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_010.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_011.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_012.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_013.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_014.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_015.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_016.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_017.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_018.png',
-            'assets/actors/animation/3/die/3_enemies_1_die_019.png'
-        }
-    },
-    {
-        run = {
-            'assets/actors/animation/4/run/5_enemies_1_run_000.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_001.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_002.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_003.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_004.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_005.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_006.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_007.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_008.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_009.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_010.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_011.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_012.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_013.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_014.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_015.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_016.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_017.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_018.png',
-            'assets/actors/animation/4/run/5_enemies_1_run_019.png'
-        },
-        die = {
-            'assets/actors/animation/4/die/5_enemies_1_die_000.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_001.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_002.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_003.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_004.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_005.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_006.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_007.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_008.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_009.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_010.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_011.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_012.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_013.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_014.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_015.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_016.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_017.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_018.png',
-            'assets/actors/animation/4/die/5_enemies_1_die_019.png'
-        }
-    },
-}
+ANIMATION_TYPE_RUN = 'run'
+ANIMATION_TYPE_DIE = 'die'
 
 local Enemy = { uniqueId = 1 }
 
@@ -206,7 +22,7 @@ function Enemy:new(type, whichPath, speed, reward, health)
         reward = reward,
         currentFrame = 1,
         timeSinceFrameChange = 0,
-        frames = enemyTypes[type].run
+        animationType = ANIMATION_TYPE_RUN
     }
 
     self.uniqueId = self.uniqueId + 1
@@ -215,7 +31,8 @@ function Enemy:new(type, whichPath, speed, reward, health)
 end
 
 function Enemy:getImage()
-    return Utils.imageFromCache(self.frames[self.currentFrame])
+    local sf = string.format('assets/actors/%d/%s/%d.png', self.type, self.animationType, self.currentFrame)
+    return Utils.imageFromCache(sf)
 end
 
 function Enemy:serialize()
@@ -256,9 +73,9 @@ function Enemy:deserialize(de)
     }
 
     if e.isDead then
-        e.frames = enemyTypes[de.type].die
+        e.animationType = ANIMATION_TYPE_DIE
     else
-        e.frames = enemyTypes[de.type].run
+        e.animationType = ANIMATION_TYPE_RUN
     end
 
     self.__index = self
@@ -269,17 +86,17 @@ function Enemy:update(state, dt)
     self.timeSinceFrameChange = self.timeSinceFrameChange + dt
     if self.timeSinceFrameChange > 0.1 then
         self.currentFrame = self.currentFrame + 1
-        if self.currentFrame == #self.frames and self.isDead then
+        if self.currentFrame == 20 and self.isDead then
             self:destroy(state)
         end
-        self.currentFrame = self.currentFrame % #self.frames + 1
+        self.currentFrame = self.currentFrame % 20 + 1
         self.timeSinceFrameChange = self.timeSinceFrameChange - 0.1
     end
 
     if self.timeToUnfroze <= 0 and self.speedModifier < 1 and not self.isDead then
         self.speedModifier = 1
         self.currentFrame = 1
-        self.frames = enemyTypes[self.type].run
+        self.animationType = ANIMATION_TYPE_RUN
     end
     self.timeToUnfroze = self.timeToUnfroze - dt
 
@@ -332,7 +149,7 @@ function Enemy:takeDamage(state, amount)
         self.isDead = true
         state.money = state.money + self.reward
         self.currentFrame = 1
-        self.frames = enemyTypes[self.type].die
+        self.animationType = ANIMATION_TYPE_DIE
     end
 end
 
