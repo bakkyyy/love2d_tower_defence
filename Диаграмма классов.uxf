@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>750</y>
+      <w>320</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Tile
+--
+- image: string
+- tower: Tower
+- towerable: boolean
+- rendered: boolean
+--
++ new(image: string, towerable: boolean) : Tile
++ getImage(): Image</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>410</y>
+      <w>320</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>Tower
+--
+- id: string
+- data: table
+- target: Enemy
+- lastShotAt: number
+- position: table
+- rotation: number
+- type: number
+--
++ new(type: number, position: table): Tower
++ getImage(): Image
++ serialize(): table
++ deserialize(data: table): nil
++ turnToTarget(): nil
++ getAttackRange(): number
++ getAttackInterval(): number
++ getDamage(): number
++ getRefundAmount(): number
++ update(state: Game, dt: number): nil
++ draw(state: Game, u: number, v: number): nil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1000</x>
+      <y>480</y>
+      <w>630</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>Enemy
+--
+- id: string
+- path: table
+- pathIndex: number
+- speed: number
+- position: table
+- speed: number
+- speedModifier: number
+- timeToUnfroze: number
+- health: number
+- isDead: boolean
+- reward: number
+- currentFrame: number
+- timeSinceFrameChange: number
+- frames: table
+- type: number
+--
++ new(type: number, whichPath: number, speed: number, reward: number, health: number): Enemy
++ getImage(): Image
++ serialize(): table
++ deserialize(data: table): nil
++ update(state: Game, dt: number): nil
++ takeDamage(state: Game, amount: number): nil
++ froze(): nil
++ destroy(): nil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>160</y>
+      <w>320</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>Bullet
+--
+- id: string
+- target: Enemy
+- tower: Tower
+- position: table
+- rotation: number
+--
++ new(tower: Tower, enemy: Enemy): Bullet
++ getImage(): Image
++ serialize(): table
++ deserialize(data: table): nil
++ turn(): nil
++ update(state: Game, dt: number): nil
++ draw(): nil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>240</y>
+      <w>310</w>
+      <h>640</h>
+    </coordinates>
+    <panel_attributes>Game
+--
+- tiles: table
+- mapType: number
+- enemies: table
+- towers: table
+- bullets: table
+- timeNow: number
+- timeLastSpawn: number
+- wave: number
+- subwave: number
+- enemiesToSpawn: number
+- spawnedAt: number
+- selectedTower: number
+- state: number
+- lives: number
+- money: number
+- night: boolean
+--
++ load(): nil
++ loadMap(): nil
++ pause(): nil
++ reset(): nil
++ serialize(): table
++ deserialize(data: table): nil
++ saveToFile(): nil
++ loadFromFile(): nil
++ update(dt: number): nil
++ drawTiles(mx: number, my: number): nil
++ resetTiles(): nil
++ drawHUD(mx: number, my: number): nil
++ drawPause(mx: number, my: number): nil
++ drawResults(): nil
++ drawWin(): nil
++ drawLose(): nil
++ drawSettings(mx: number, my: number): nil
++ drawSaving(mx: number, my: number): nil
++ drawOverWr(mx: number, my: number): nil
++ drawAll(mx: number, my: number): nil
++ draw(mx: number, my: number): nil
++ getImage(): Image</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>940</x>
+      <y>10</y>
+      <w>210</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>App
+--
+- _current: table
+- menu: Menu,
+- game: Game
+- mouseDown: table
+- width: number
+- height: number
+--
++ changeScreen(name: string)
++ isMouseDown(i: number)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1130</x>
+      <y>240</y>
+      <w>310</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Menu
+--
+- state: number
+- buttons: table
+--
++ load(): nil
++ update(dt: number): nil
++ drawMain(mx: number, my: number): nil
++ drawNewGame(mx: number, my: number): nil
++ drawLoadGame(mx: number, my: number): nil
++ drawSettings(mx: number, my: number): nil
++ draw(mx: number, my: number): nil</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1070</x>
+      <y>160</y>
+      <w>240</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;220.0;50.0;220.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>160</y>
+      <w>280</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>260.0;10.0;260.0;50.0;10.0;50.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>660</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>550</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>800</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>280</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
