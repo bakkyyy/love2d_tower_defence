@@ -11,7 +11,6 @@ local Bullet = { uniqueId = 1 }
 function Bullet:new(tower, enemy)
     local b = {
         id = tostring(self.uniqueId),
-        image = bulletTypes[tower.type],
         position = Utils.deepCopy(tower.position),
         tower = tower,
         target = enemy,
@@ -25,13 +24,13 @@ end
 
 function Bullet:getImage()
     self:turn()
-    return Utils.imageFromCache(self.image)
+    local sf = string.format('assets/bullets/%d.png', self.tower.type)
+    return Utils.imageFromCache(sf)
 end
 
 function Bullet:serialize()
     local b = {
         id = self.id,
-        image = self.image,
         position = self.position,
         rotation = self.rotation
     }
@@ -52,7 +51,6 @@ function Bullet:deserialize(de)
 
     local b = {
         id = de.id,
-        image = bulletTypes[tower.type],
         position = Utils.deepCopy(tower.position),
         tower = tower,
         target = tower.target,
@@ -78,7 +76,7 @@ function Bullet:update(state, dt)
     self.position[1] = self.position[1] + 10*dx*dt
     self.position[2] = self.position[2] + 10*dy*dt
 
-    if dx*dx+dy*dy < 0.5 then
+    if dx*dx+dy*dy < 0.25 then
         self.target:takeDamage(state, self.tower:getDamage())
         if self.tower.type == 1 then
             self.target:froze()
@@ -94,7 +92,8 @@ function Bullet:draw()
     local bx = u + (self.position[1] - self.position[2]) * 65
     local by = v + (self.position[1] + self.position[2] - 2) * 32
 
-    love.graphics.draw(self:getImage(), bx, by, self.rotation)
+    local image = self:getImage()
+    love.graphics.draw(image, bx, by, self.rotation, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
 function Bullet:destroy(state)

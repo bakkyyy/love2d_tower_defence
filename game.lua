@@ -149,7 +149,6 @@ function Game:loadMap()
 end
 
 function Game:load()
-    self.mapType = App.newgame.mapType
     self:loadMap()
     self:reset()
 
@@ -157,42 +156,42 @@ function Game:load()
     musicwar:setVolume(App.settings.musicVolume)
     musicwar:play()
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause2.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_continue_hover.png'), fn = function()
         App.game:pause()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause3.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_reset_hover.png'), fn = function()
         click:play()
         App.changeScreen('game')
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause4.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_settings_hover.png'), fn = function()
         click:play()
         self.state = GAME_STATE_SETTINGS
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause5.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_exit_hover.png'), fn = function()
         click:play()
         self.state = GAME_STATE_SAVING
         --love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/pause/pause.png'), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause.png'), fn = nil })
     --для настроек паузы
 
-    mc = Utils.imageFromCache('assets/settings/scroll.png')
-    ec = Utils.imageFromCache('assets/settings/scroll.png')
+    mc = Utils.imageFromCache('assets/menu/scroll.png')
+    ec = Utils.imageFromCache('assets/menu/scroll.png')
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/settings/pause_settings2.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_settings_back.png'), fn = function()
         click:play()
         self.state = GAME_STATE_PAUSED
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/settings/pause_settings.png'), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_settings.png'), fn = nil })
 
     --для сохранения
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame2.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_yes.png'), fn = function()
         click:play()
         if Utils.fileExists('save.ppg') then
             self.state = GAME_STATE_OVERWRITE
@@ -204,16 +203,16 @@ function Game:load()
         end
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame3.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_no.png'), fn = function()
         musicwar:stop()
         App.changeScreen('menu')
         music:play()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame.png'), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame.png'), fn = nil })
     --для перезаписи
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame5.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_overwrite_yes.png'), fn = function()
         click:play()
         self:saveToFile()
         musicwar:stop()
@@ -221,13 +220,13 @@ function Game:load()
         music:play()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame6.png'), fn = function()
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_overwrite_no.png'), fn = function()
         musicwar:stop()
         App.changeScreen('menu')
         music:play()
     end })
 
-    table.insert(self.buttons, {image = Utils.imageFromCache('assets/savegame/savegame4.png'), fn = nil })
+    table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_overwrite.png'), fn = nil })
 end
 
 function Game:update(dt)
@@ -442,8 +441,6 @@ function Game:drawHUD(mx, my)
             love.graphics.print(tostring(tool.price), font20, tool.min[1] + 56, tool.max[2]-15, 0, 1, 1, cx)
             love.graphics.setColor({1, 1, 1})
         end
-
-        -- love.graphics.rectangle('line', tool.min[1], tool.min[2], tool.max[1] - tool.min[1], tool.max[1] - tool.min[1])
     end
 
     if self.selectedTower ~= 0 then

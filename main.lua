@@ -3,13 +3,14 @@ local Utils = require 'utils'
 App = {
     _current = nil,
     menu = require 'menu',
-    newgame = require 'newgame',
     game = require 'game',
-    settings = require 'settings',
-    loadgame = require 'loadgame',
     mouseDown = {},
     width = 1920,
-    height = 1080
+    height = 1080,
+    settings = {
+        musicVolume = 0.5,
+        effectsVolume = 0.5
+    }
 }
 
 App.changeScreen = function(name)

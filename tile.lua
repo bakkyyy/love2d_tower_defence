@@ -17,13 +17,4 @@ function Tile:getImage()
     return Utils.imageFromCache(self.image)
 end
 
-function Tile:serialize()
-    return {
-        image = self.image,
-        tower = self.tower.id,
-        towerable = self.towerable,
-        rendered = self.rendered
-    }
-end
-
 return Tile
