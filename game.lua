@@ -16,7 +16,6 @@ GAME_STATE_SAVING = 32
 GAME_STATE_SETTINGS = 64
 GAME_STATE_OVERWRITE = 128
 
-
 local Game = { state = GAME_STATE_STOPPED }
 
 function Game:pause()
@@ -254,7 +253,7 @@ function Game:update(dt)
     subwave = wave[self.subwave]
 
     if self.timeNow - self.spawnedAt > subwave.spawnInterval and self.enemiesToSpawn > 0 then
-        local whichPath = (self.enemiesToSpawn % #self.map.paths) + 1
+        local whichPath = (Enemy.uniqueId % #self.map.paths) + 1
         local e = Enemy:new(subwave.type, whichPath, subwave.speed, subwave.reward, subwave.health)
         self.enemies[e.id] = e
         self.spawnedAt = self.timeNow

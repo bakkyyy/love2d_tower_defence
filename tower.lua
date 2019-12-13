@@ -133,7 +133,19 @@ function Tower:getRefundAmount()
     sellsound:setLooping(false)
     sellsound:setVolume(App.settings.effectsVolume)
     sellsound:play()
-    return self.data.price/2
+    return 3*self.data.price/4
+end
+
+function Tower:findEnemy(state)
+    for j, enemy in pairs(state.enemies) do
+        local dx = enemy.position[1] - self.position[1]
+        local dy = enemy.position[2] - self.position[2]
+        local ar = self:getAttackRange()
+        if dx*dx+dy*dy <= ar*ar and not enemy.isDead then
+            self.target = enemy
+            return
+        end
+    end
 end
 
 function Tower:update(state, dt)
@@ -146,16 +158,7 @@ function Tower:update(state, dt)
         end
     end
 
-    if self.target == nil then
-        for j, enemy in pairs(state.enemies) do
-            local dx = enemy.position[1] - self.position[1]
-            local dy = enemy.position[2] - self.position[2]
-            local ar = self:getAttackRange()
-            if dx*dx+dy*dy <= ar*ar and not enemy.isDead then
-                self.target = enemy
-            end
-        end
-    end
+    self:findEnemy(state)
 
     if self.target ~= nil then
         self:turnToTarget()
