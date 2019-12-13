@@ -173,7 +173,6 @@ function Game:load()
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause_exit_hover.png'), fn = function()
         click:play()
         self.state = GAME_STATE_SAVING
-        --love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
     end })
 
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/pause.png'), fn = nil })
@@ -545,11 +544,6 @@ function Game:drawSettings(mx, my)
         music:setVolume(App.settings.musicVolume)
         musicwar:setVolume(App.settings.musicVolume)
     end
-    --love.graphics.print(App.settings.musicVolume, font, cx+200, cy - 0.25*cy)
-    --love.graphics.print({msx + 1.5*scroll:getWidth(), mx})
-    --love.graphics.rectangle('line', msx, msy, 290, 20)
-    --love.graphics.rectangle('line', msx - 135  + (100*App.settings.musicVolume/290), msy - 80, 290, 20)--msx - 135, msy - 80, 290, 20)
-    --love.graphics.draw(mc, cx - 3*scroll:getWidth()/4 + 1.5*scroll:getWidth() * (1 - self.musicVolume), App.height/2.20, 0, 1.5, 1.5)
     love.graphics.draw(mc, msx + (App.settings.musicVolume*290*0.98), msy - 12, 0)
 
     local esx = cx - 135
