@@ -23,7 +23,7 @@ function Bullet:new(tower, enemy)
 end
 
 function Bullet:getImage()
-    self:turn()
+    self:turnToTarget()
     local sf = string.format('assets/bullets/%d.png', self.tower.type)
     return Utils.imageFromCache(sf)
 end
@@ -61,7 +61,7 @@ function Bullet:deserialize(de)
     return setmetatable(b, self)
 end
 
-function Bullet:turn()
+function Bullet:turnToTarget()
     local angle = math.atan2(self.target.position[1] - self.position[1], self.target.position[2] - self.position[2])
     if angle < 0 then
         angle = angle + 2*math.pi

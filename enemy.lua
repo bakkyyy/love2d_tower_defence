@@ -155,7 +155,6 @@ end
 
 function Enemy:froze()
     self.speedModifier = 0.5
-    self.currentFrame = 1
     self.timeToUnfroze = 1
 end
 

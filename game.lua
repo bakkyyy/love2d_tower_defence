@@ -16,7 +16,6 @@ GAME_STATE_SAVING = 32
 GAME_STATE_SETTINGS = 64
 GAME_STATE_OVERWRITE = 128
 
-
 local Game = { state = GAME_STATE_STOPPED }
 
 function Game:pause()
