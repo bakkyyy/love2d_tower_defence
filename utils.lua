@@ -162,3 +162,15 @@ end
 function fileExists(path)
     return love.filesystem.getInfo(path, 'file') ~= nil
 end
+
+return {
+    imageFromCache = imageFromCache,
+    audioFromCache = audioFromCache,
+    gradientMesh = gradientMesh,
+    deepCopy = deepCopy,
+    removeByKey = removeByKey,
+    pointInRect = pointInRect,
+    clamp = clamp,
+    tableSize = tableSize,
+    fileExists = fileExists
+}
