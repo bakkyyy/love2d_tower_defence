@@ -1,0 +1,367 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bullet.html">Bullet</a></li>
+  <li><a href="../modules/Enemy.html">Enemy</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><a href="../modules/Menu.html">Menu</a></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><a href="../modules/Tower.html">Tower</a></li>
+  <li><strong>Utils</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Utils</code></h1>
+<p>Вспомогательные функции</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#imageFromCache">imageFromCache (path)</a></td>
+	<td class="summary">возвращает изображение из кеша или загружает его</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#audioFromCache">audioFromCache (path)</a></td>
+	<td class="summary">возвращает аудио из кеша или загружает его</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#gradientMesh">gradientMesh (dir, ...)</a></td>
+	<td class="summary">создаёт градиент из заданных цветов</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#deepCopy">deepCopy (orig[, copies])</a></td>
+	<td class="summary">делает полную копию объекта</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#removeByKey">removeByKey (array, key)</a></td>
+	<td class="summary">удаляет элемент из массива или таблицы</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#pointInRect">pointInRect (a, b, c, d, m)</a></td>
+	<td class="summary">считает площадь четырёхугольника по четырём точкам</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#clamp">clamp (x, a, b)</a></td>
+	<td class="summary">ограничивает величину заданным интервалом</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tableSize">tableSize (t)</a></td>
+	<td class="summary">возвращает размер таблицы</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fileExists">fileExists (path)</a></td>
+	<td class="summary">проверяет файл на существование</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "imageFromCache"></a>
+    <strong>imageFromCache (path)</strong>
+    </dt>
+    <dd>
+    возвращает изображение из кеша или загружает его
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+         относительный путь до изображения
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        изображение
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "audioFromCache"></a>
+    <strong>audioFromCache (path)</strong>
+    </dt>
+    <dd>
+    возвращает аудио из кеша или загружает его
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+         относительный путь до аудио файла
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        аудио
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "gradientMesh"></a>
+    <strong>gradientMesh (dir, ...)</strong>
+    </dt>
+    <dd>
+    создаёт градиент из заданных цветов
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dir</span>
+         направление градиента 'horizontal' или 'vertical'
+        </li>
+        <li><span class="parameter">...</span>
+         цвета в формате {r, g, b, a}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        градиент
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deepCopy"></a>
+    <strong>deepCopy (orig[, copies])</strong>
+    </dt>
+    <dd>
+    делает полную копию объекта
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">orig</span>
+         исходный объект для копирования
+        </li>
+        <li><span class="parameter">copies</span>
+         объект, в который нужно скопировать
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        полная копия исходного объекта
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "removeByKey"></a>
+    <strong>removeByKey (array, key)</strong>
+    </dt>
+    <dd>
+    удаляет элемент из массива или таблицы
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">array</span>
+         массив или таблица
+        </li>
+        <li><span class="parameter">key</span>
+         индекс или ключ для удаления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "pointInRect"></a>
+    <strong>pointInRect (a, b, c, d, m)</strong>
+    </dt>
+    <dd>
+    считает площадь четырёхугольника по четырём точкам
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+         точка {x, y}
+        </li>
+        <li><span class="parameter">b</span>
+         точка {x, y}
+        </li>
+        <li><span class="parameter">c</span>
+         точка {x, y}
+        </li>
+        <li><span class="parameter">d</span>
+         точка {x, y}
+        </li>
+        <li><span class="parameter">m</span>
+         точка {x, y} которую нужно проверить
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true, если точка лежит внутри четырёхугольника с заданными координатами, иначе false
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "clamp"></a>
+    <strong>clamp (x, a, b)</strong>
+    </dt>
+    <dd>
+    ограничивает величину заданным интервалом
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+         исходная величина
+        </li>
+        <li><span class="parameter">a</span>
+         нижняя граница
+        </li>
+        <li><span class="parameter">b</span>
+         верхняя граница
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        a, если x < a; b, если x > b; иначе x
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tableSize"></a>
+    <strong>tableSize (t)</strong>
+    </dt>
+    <dd>
+    возвращает размер таблицы
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+         таблица
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        количество элементов в таблице
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fileExists"></a>
+    <strong>fileExists (path)</strong>
+    </dt>
+    <dd>
+    проверяет файл на существование
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+         относительный путь до файла
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true, если файл существует, иначе false
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

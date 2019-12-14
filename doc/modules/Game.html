@@ -1,0 +1,499 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bullet.html">Bullet</a></li>
+  <li><a href="../modules/Enemy.html">Enemy</a></li>
+  <li><strong>Game</strong></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><a href="../modules/Menu.html">Menu</a></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><a href="../modules/Tower.html">Tower</a></li>
+  <li><a href="../modules/Utils.html">Utils</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Game</code></h1>
+<p>Класс Игры</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#pause">pause ()</a></td>
+	<td class="summary">ставит игру на паузу</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reset">reset ()</a></td>
+	<td class="summary">сбрасывает состояние игры к начальному</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#serialize">serialize ()</a></td>
+	<td class="summary">сериализует состояние игры</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#saveToFile">saveToFile ()</a></td>
+	<td class="summary">сохраняет состояние игры в файл</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#loadFromFile">loadFromFile ()</a></td>
+	<td class="summary">загружает состояние игры из файла</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#loadMap">loadMap ()</a></td>
+	<td class="summary">загружает выбранную карту</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#load">load ()</a></td>
+	<td class="summary">загружает необходимые файлы для сцены игры</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (dt)</a></td>
+	<td class="summary">жизненный цикл игры</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawTiles">drawTiles (mx, my)</a></td>
+	<td class="summary">отрисовывает тайлы</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#resetTiles">resetTiles ()</a></td>
+	<td class="summary">сбрасывает состояние тайлов</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawHUD">drawHUD (mx, my)</a></td>
+	<td class="summary">отрисовывает интерфейс игры</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawPause">drawPause (mx, my)</a></td>
+	<td class="summary">отрисовывает меню паузы</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawWin">drawWin ()</a></td>
+	<td class="summary">отрисовывает победу</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawLose">drawLose ()</a></td>
+	<td class="summary">отрисовывает поражение</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawResults">drawResults ()</a></td>
+	<td class="summary">отрисовывает результаты</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawSettings">drawSettings (mx, my)</a></td>
+	<td class="summary">отрисовывает настройки</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawSaving">drawSaving (mx, my)</a></td>
+	<td class="summary">отрисовывает сохранение</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawOverWr">drawOverWr (mx, my)</a></td>
+	<td class="summary">отрисовывает перезапись</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#draw">draw (mx, my)</a></td>
+	<td class="summary">отрисовывает игру</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "pause"></a>
+    <strong>pause ()</strong>
+    </dt>
+    <dd>
+    ставит игру на паузу
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "reset"></a>
+    <strong>reset ()</strong>
+    </dt>
+    <dd>
+    сбрасывает состояние игры к начальному
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "serialize"></a>
+    <strong>serialize ()</strong>
+    </dt>
+    <dd>
+    сериализует состояние игры
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        таблица
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "saveToFile"></a>
+    <strong>saveToFile ()</strong>
+    </dt>
+    <dd>
+    сохраняет состояние игры в файл
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "loadFromFile"></a>
+    <strong>loadFromFile ()</strong>
+    </dt>
+    <dd>
+    загружает состояние игры из файла
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "loadMap"></a>
+    <strong>loadMap ()</strong>
+    </dt>
+    <dd>
+    загружает выбранную карту
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "load"></a>
+    <strong>load ()</strong>
+    </dt>
+    <dd>
+    загружает необходимые файлы для сцены игры
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (dt)</strong>
+    </dt>
+    <dd>
+    жизненный цикл игры
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+         время, прошедшее с прошлого обновления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawTiles"></a>
+    <strong>drawTiles (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает тайлы
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "resetTiles"></a>
+    <strong>resetTiles ()</strong>
+    </dt>
+    <dd>
+    сбрасывает состояние тайлов
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawHUD"></a>
+    <strong>drawHUD (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает интерфейс игры
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawPause"></a>
+    <strong>drawPause (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает меню паузы
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawWin"></a>
+    <strong>drawWin ()</strong>
+    </dt>
+    <dd>
+    отрисовывает победу
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawLose"></a>
+    <strong>drawLose ()</strong>
+    </dt>
+    <dd>
+    отрисовывает поражение
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawResults"></a>
+    <strong>drawResults ()</strong>
+    </dt>
+    <dd>
+    отрисовывает результаты
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawSettings"></a>
+    <strong>drawSettings (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает настройки
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawSaving"></a>
+    <strong>drawSaving (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает сохранение
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawOverWr"></a>
+    <strong>drawOverWr (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает перезапись
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает игру
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bullet.html">Bullet</a></li>
+  <li><strong>Enemy</strong></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><a href="../modules/Menu.html">Menu</a></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><a href="../modules/Tower.html">Tower</a></li>
+  <li><a href="../modules/Utils.html">Utils</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Enemy</code></h1>
+<p>Класс Противника</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (type, whichPath, speed, reward, health)</a></td>
+	<td class="summary">создаёт новый экземпляр Enemy</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getImage">getImage ()</a></td>
+	<td class="summary">возвращает изображение текущего противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#serialize">serialize ()</a></td>
+	<td class="summary">сериализует противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#deserialize">deserialize (de)</a></td>
+	<td class="summary">десериализует противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (state, dt)</a></td>
+	<td class="summary">жизненный цикл противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#takeDamage">takeDamage (state, amount)</a></td>
+	<td class="summary">наносит противнику урон, если он больше оставшейся жизни - убивает противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#froze">froze ()</a></td>
+	<td class="summary">замедляет противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#destroy">destroy (state)</a></td>
+	<td class="summary">удаляет противника со сцены</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (type, whichPath, speed, reward, health)</strong>
+    </dt>
+    <dd>
+    создаёт новый экземпляр Enemy
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
+         тип противника 1, 2, 3 или 4
+        </li>
+        <li><span class="parameter">whichPath</span>
+         номер пути из карты
+        </li>
+        <li><span class="parameter">speed</span>
+         скорость перемещения
+        </li>
+        <li><span class="parameter">reward</span>
+         вознаграждение за уничтожение противника
+        </li>
+        <li><span class="parameter">health</span>
+         количество жизни
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        новая башня
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getImage"></a>
+    <strong>getImage ()</strong>
+    </dt>
+    <dd>
+    возвращает изображение текущего противника
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        изображение
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "serialize"></a>
+    <strong>serialize ()</strong>
+    </dt>
+    <dd>
+    сериализует противника
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        таблица {id, type, whichPath, pathIndex, position, speed, speedModifier, timeToUnfroze, health, isDead, reward, currentFrame, timeSinceFrameChange}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deserialize"></a>
+    <strong>deserialize (de)</strong>
+    </dt>
+    <dd>
+    десериализует противника
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">de</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        инстанс противника
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (state, dt)</strong>
+    </dt>
+    <dd>
+    жизненный цикл противника
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+        <li><span class="parameter">dt</span>
+         время, прошедшее с прошлого обновления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "takeDamage"></a>
+    <strong>takeDamage (state, amount)</strong>
+    </dt>
+    <dd>
+    наносит противнику урон, если он больше оставшейся жизни - убивает противника
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+        <li><span class="parameter">amount</span>
+         количество урона
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "froze"></a>
+    <strong>froze ()</strong>
+    </dt>
+    <dd>
+    замедляет противника
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "destroy"></a>
+    <strong>destroy (state)</strong>
+    </dt>
+    <dd>
+    удаляет противника со сцены
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

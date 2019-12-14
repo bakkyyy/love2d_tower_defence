@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>Bullet</strong></li>
+  <li><a href="../modules/Enemy.html">Enemy</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><a href="../modules/Menu.html">Menu</a></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><a href="../modules/Tower.html">Tower</a></li>
+  <li><a href="../modules/Utils.html">Utils</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Bullet</code></h1>
+<p>Класс Снаряда</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (tower, enemy)</a></td>
+	<td class="summary">создаёт новый экземпляр Bullet</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getImage">getImage ()</a></td>
+	<td class="summary">возвращает изображение текущего снаряда</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#serialize">serialize ()</a></td>
+	<td class="summary">сериализует снаряд</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#deserialize">deserialize (de)</a></td>
+	<td class="summary">десериализует снаряд</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#turnToTarget">turnToTarget ()</a></td>
+	<td class="summary">поворачивает снаряд в сторону противника</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (state, dt)</a></td>
+	<td class="summary">жизненный цикл снаряда</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#draw">draw ()</a></td>
+	<td class="summary">отрисовывает снаряд</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#destroy">destroy (state)</a></td>
+	<td class="summary">удаляет снаряд со сцены</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (tower, enemy)</strong>
+    </dt>
+    <dd>
+    создаёт новый экземпляр Bullet
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">tower</span>
+         башня, из которой выпущен снаряд
+        </li>
+        <li><span class="parameter">enemy</span>
+         цель, в которую направлен снаряд
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        новая снаряд
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getImage"></a>
+    <strong>getImage ()</strong>
+    </dt>
+    <dd>
+    возвращает изображение текущего снаряда
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        изображение
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "serialize"></a>
+    <strong>serialize ()</strong>
+    </dt>
+    <dd>
+    сериализует снаряд
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        таблица {id, position, rotation[,target]}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deserialize"></a>
+    <strong>deserialize (de)</strong>
+    </dt>
+    <dd>
+    десериализует снаряд
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">de</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        инстанс снаряда
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "turnToTarget"></a>
+    <strong>turnToTarget ()</strong>
+    </dt>
+    <dd>
+    поворачивает снаряд в сторону противника
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (state, dt)</strong>
+    </dt>
+    <dd>
+    жизненный цикл снаряда
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+        <li><span class="parameter">dt</span>
+         время, прошедшее с прошлого обновления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw ()</strong>
+    </dt>
+    <dd>
+    отрисовывает снаряд
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "destroy"></a>
+    <strong>destroy (state)</strong>
+    </dt>
+    <dd>
+    удаляет снаряд со сцены
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

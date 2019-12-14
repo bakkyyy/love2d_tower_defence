@@ -1,3 +1,7 @@
+---
+-- Главный модуль игры
+-- @module App
+
 local Utils = require 'utils'
 
 App = {
@@ -13,12 +17,17 @@ App = {
     }
 }
 
+--- переключает текущую сцену
+-- @param name название сцены
 App.changeScreen = function(name)
     App._current = App[name]
     App._current:load()
     click:play()
 end
 
+--- возвращает нажата ли кнопка
+-- @param i индекс кнопки мыши
+-- @return true, если кнопка нажата, false если не нажата или значение уже было считано
 App.isMouseDown = function(i)
     local f = App.mouseDown[i]
     App.mouseDown[i] = false

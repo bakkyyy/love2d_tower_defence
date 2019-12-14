@@ -1,3 +1,7 @@
+---
+-- Класс Башня
+-- @module Tower
+
 local Bullet = require 'bullet'
 local Utils = require 'utils'
 
@@ -45,6 +49,10 @@ towerTypes = {
 
 local Tower = { uniqueId = 1 }
 
+--- создаёт новый экземпляр Tower
+-- @param type тип башни 1, 2 или 3
+-- @param position координаты башни {x, y}
+-- @return новая башня
 function Tower:new(type, position)
     local o = {
         id = tostring(self.uniqueId),
@@ -65,10 +73,15 @@ function Tower:new(type, position)
     return setmetatable(o, self)
 end
 
+
+--- возвращает изображение текущей башни
+-- @return изображение
 function Tower:getImage()
     return Utils.imageFromCache(self.data.images[self.rotation])
 end
 
+--- сериализует башню
+-- @return таблица {id, lastShotAt, position, rotation, type}
 function Tower:serialize()
     local t = {
         id = self.id,
@@ -85,6 +98,8 @@ function Tower:serialize()
     return t
 end
 
+--- десериализует башню
+-- @return инстанс башня
 function Tower:deserialize(de)
     local t = {
         id = de.id,
@@ -100,6 +115,7 @@ function Tower:deserialize(de)
     return setmetatable(t, self)
 end
 
+--- поворачивает башню в сторону противника, если он есть
 function Tower:turnToTarget()
     local angle = math.deg(math.atan2(self.target.position[1] - self.position[1], self.target.position[2] - self.position[2]))
     if angle < 0 then
@@ -117,18 +133,26 @@ function Tower:turnToTarget()
     end
 end
 
+--- возвращает радиус атаки башни
+-- @return дальность
 function Tower:getAttackRange()
     return self.data.attackRange
 end
 
+--- возвращает время между атаками башни
+-- @return интервал
 function Tower:getAttackInterval()
     return self.data.attackInterval
 end
 
+--- возвращает урон, который наносит башня
+-- @return урон
 function Tower:getDamage()
     return self.data.damage
 end
 
+--- возвращает стоимость продажи башни
+-- @return стоимость
 function Tower:getRefundAmount()
     sellsound:setLooping(false)
     sellsound:setVolume(App.settings.effectsVolume)
@@ -136,6 +160,8 @@ function Tower:getRefundAmount()
     return 3*self.data.price/4
 end
 
+--- устанавливает цель для башни, если враг находится в радиусе её действия
+-- @param state состояние игры
 function Tower:findEnemy(state)
     for j, enemy in pairs(state.enemies) do
         local dx = enemy.position[1] - self.position[1]
@@ -148,6 +174,9 @@ function Tower:findEnemy(state)
     end
 end
 
+--- жизненный цикл башни
+-- @param state состояние игры
+-- @param dt время, прошедшее с прошлого обновления
 function Tower:update(state, dt)
     if self.target ~= nil then
         local dx = self.target.position[1] - self.position[1]
@@ -176,8 +205,12 @@ function Tower:update(state, dt)
     end
 end
 
-function Tower:draw(state, u, v)
-    love.graphics.draw(self:getImage(), u, v - 16)
+--- отрисовывает башню в заданных координатах
+-- @param state состояние игры
+-- @param x
+-- @param y
+function Tower:draw(state, x, y)
+    love.graphics.draw(self:getImage(), x, y - 16)
     for _,bullet in pairs(state.bullets) do
         bullet:draw()
     end

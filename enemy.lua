@@ -1,3 +1,7 @@
+---
+-- Класс Противника
+-- @module Enemy
+
 local Utils = require 'utils'
 
 ANIMATION_TYPE_RUN = 'run'
@@ -5,6 +9,13 @@ ANIMATION_TYPE_DIE = 'die'
 
 local Enemy = { uniqueId = 1 }
 
+--- создаёт новый экземпляр Enemy
+-- @param type тип противника 1, 2, 3 или 4
+-- @param whichPath номер пути из карты
+-- @param speed скорость перемещения
+-- @param reward вознаграждение за уничтожение противника
+-- @param health количество жизни
+-- @return новая башня
 function Enemy:new(type, whichPath, speed, reward, health)
     local path = App.game.map.paths[whichPath]
     local o = {
@@ -30,11 +41,15 @@ function Enemy:new(type, whichPath, speed, reward, health)
     return setmetatable(o, self)
 end
 
+--- возвращает изображение текущего противника
+-- @return изображение
 function Enemy:getImage()
     local sf = string.format('assets/actors/%d/%s/%d.png', self.type, self.animationType, self.currentFrame)
     return Utils.imageFromCache(sf)
 end
 
+--- сериализует противника
+-- @return таблица {id, type, whichPath, pathIndex, position, speed, speedModifier, timeToUnfroze, health, isDead, reward, currentFrame, timeSinceFrameChange}
 function Enemy:serialize()
     return {
         type = self.type,
@@ -53,6 +68,8 @@ function Enemy:serialize()
     }
 end
 
+--- десериализует противника
+-- @return инстанс противника
 function Enemy:deserialize(de)
     local path = App.game.map.paths[de.whichPath]
     local e = {
@@ -82,6 +99,9 @@ function Enemy:deserialize(de)
     return setmetatable(e, self)
 end
 
+--- жизненный цикл противника
+-- @param state состояние игры
+-- @param dt время, прошедшее с прошлого обновления
 function Enemy:update(state, dt)
     self.timeSinceFrameChange = self.timeSinceFrameChange + dt
     if self.timeSinceFrameChange > 0.1 then
@@ -143,6 +163,9 @@ function Enemy:update(state, dt)
     end
 end
 
+--- наносит противнику урон, если он больше оставшейся жизни - убивает противника
+-- @param state состояние игры
+-- @param amount количество урона
 function Enemy:takeDamage(state, amount)
     self.health = self.health - amount
     if self.health <= 0 then
@@ -153,11 +176,14 @@ function Enemy:takeDamage(state, amount)
     end
 end
 
+--- замедляет противника
 function Enemy:froze()
     self.speedModifier = 0.5
     self.timeToUnfroze = 1
 end
 
+--- удаляет противника со сцены
+-- @param state состояние игры
 function Enemy:destroy(state)
     Utils.removeByKey(state.enemies, self.id)
 end

@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bullet.html">Bullet</a></li>
+  <li><a href="../modules/Enemy.html">Enemy</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><a href="../modules/Menu.html">Menu</a></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><strong>Tower</strong></li>
+  <li><a href="../modules/Utils.html">Utils</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Tower</code></h1>
+<p>Класс Башня</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#new">new (type, position)</a></td>
+	<td class="summary">создаёт новый экземпляр Tower</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getImage">getImage ()</a></td>
+	<td class="summary">возвращает изображение текущей башни</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#serialize">serialize ()</a></td>
+	<td class="summary">сериализует башню</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#deserialize">deserialize (de)</a></td>
+	<td class="summary">десериализует башню</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#turnToTarget">turnToTarget ()</a></td>
+	<td class="summary">поворачивает башню в сторону противника, если он есть</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getAttackRange">getAttackRange ()</a></td>
+	<td class="summary">возвращает радиус атаки башни</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getAttackInterval">getAttackInterval ()</a></td>
+	<td class="summary">возвращает время между атаками башни</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getDamage">getDamage ()</a></td>
+	<td class="summary">возвращает урон, который наносит башня</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getRefundAmount">getRefundAmount ()</a></td>
+	<td class="summary">возвращает стоимость продажи башни</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#findEnemy">findEnemy (state)</a></td>
+	<td class="summary">устанавливает цель для башни, если враг находится в радиусе её действия</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (state, dt)</a></td>
+	<td class="summary">жизненный цикл башни</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#draw">draw (state, x, y)</a></td>
+	<td class="summary">отрисовывает башню в заданных координатах</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "new"></a>
+    <strong>new (type, position)</strong>
+    </dt>
+    <dd>
+    создаёт новый экземпляр Tower
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
+         тип башни 1, 2 или 3
+        </li>
+        <li><span class="parameter">position</span>
+         координаты башни {x, y}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        новая башня
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getImage"></a>
+    <strong>getImage ()</strong>
+    </dt>
+    <dd>
+    возвращает изображение текущей башни
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        изображение
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "serialize"></a>
+    <strong>serialize ()</strong>
+    </dt>
+    <dd>
+    сериализует башню
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        таблица {id, lastShotAt, position, rotation, type}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "deserialize"></a>
+    <strong>deserialize (de)</strong>
+    </dt>
+    <dd>
+    десериализует башню
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">de</span>
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        инстанс башня
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "turnToTarget"></a>
+    <strong>turnToTarget ()</strong>
+    </dt>
+    <dd>
+    поворачивает башню в сторону противника, если он есть
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getAttackRange"></a>
+    <strong>getAttackRange ()</strong>
+    </dt>
+    <dd>
+    возвращает радиус атаки башни
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        дальность
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getAttackInterval"></a>
+    <strong>getAttackInterval ()</strong>
+    </dt>
+    <dd>
+    возвращает время между атаками башни
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        интервал
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getDamage"></a>
+    <strong>getDamage ()</strong>
+    </dt>
+    <dd>
+    возвращает урон, который наносит башня
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        урон
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getRefundAmount"></a>
+    <strong>getRefundAmount ()</strong>
+    </dt>
+    <dd>
+    возвращает стоимость продажи башни
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+        стоимость
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "findEnemy"></a>
+    <strong>findEnemy (state)</strong>
+    </dt>
+    <dd>
+    устанавливает цель для башни, если враг находится в радиусе её действия
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (state, dt)</strong>
+    </dt>
+    <dd>
+    жизненный цикл башни
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+        <li><span class="parameter">dt</span>
+         время, прошедшее с прошлого обновления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw (state, x, y)</strong>
+    </dt>
+    <dd>
+    отрисовывает башню в заданных координатах
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">state</span>
+         состояние игры
+        </li>
+        <li><span class="parameter">x</span>
+
+        </li>
+        <li><span class="parameter">y</span>
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

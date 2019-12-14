@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/Bullet.html">Bullet</a></li>
+  <li><a href="../modules/Enemy.html">Enemy</a></li>
+  <li><a href="../modules/Game.html">Game</a></li>
+  <li><a href="../modules/json.html">json</a></li>
+  <li><a href="../modules/App.html">App</a></li>
+  <li><strong>Menu</strong></li>
+  <li><a href="../modules/Tile.html">Tile</a></li>
+  <li><a href="../modules/Tower.html">Tower</a></li>
+  <li><a href="../modules/Utils.html">Utils</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>Menu</code></h1>
+<p>Класс Меню</p>
+<p></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#load">load ()</a></td>
+	<td class="summary">подгружает ресурсы, необходимые для меню</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update">update (dt)</a></td>
+	<td class="summary">жизненный цикл меню</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawMain">drawMain (mx, my)</a></td>
+	<td class="summary">отрисовывает главное меню</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawNewGame">drawNewGame (mx, my)</a></td>
+	<td class="summary">отрисовывает меню новая игра</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawLoadGame">drawLoadGame (mx, my)</a></td>
+	<td class="summary">отрисовывает меню загрузить игру</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#drawSettings">drawSettings (mx, my)</a></td>
+	<td class="summary">отрисовывает меню настройки</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#draw">draw (mx, my)</a></td>
+	<td class="summary">отрисовывает меню в соответствии с текущим состоянием</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "load"></a>
+    <strong>load ()</strong>
+    </dt>
+    <dd>
+    подгружает ресурсы, необходимые для меню
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update"></a>
+    <strong>update (dt)</strong>
+    </dt>
+    <dd>
+    жизненный цикл меню
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">dt</span>
+         время, прошедшее с прошлого обновления
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawMain"></a>
+    <strong>drawMain (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает главное меню
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawNewGame"></a>
+    <strong>drawNewGame (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает меню новая игра
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawLoadGame"></a>
+    <strong>drawLoadGame (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает меню загрузить игру
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "drawSettings"></a>
+    <strong>drawSettings (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает меню настройки
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "draw"></a>
+    <strong>draw (mx, my)</strong>
+    </dt>
+    <dd>
+    отрисовывает меню в соответствии с текущим состоянием
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mx</span>
+         координата x мыши
+        </li>
+        <li><span class="parameter">my</span>
+         координата y мыши
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-12-14 10:43:10 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

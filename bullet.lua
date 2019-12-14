@@ -1,3 +1,7 @@
+---
+-- Класс Снаряда
+-- @module Bullet
+
 local Utils = require 'utils'
 
 local bulletTypes = {
@@ -8,6 +12,10 @@ local bulletTypes = {
 
 local Bullet = { uniqueId = 1 }
 
+--- создаёт новый экземпляр Bullet
+-- @param tower башня, из которой выпущен снаряд
+-- @param enemy цель, в которую направлен снаряд
+-- @return новая снаряд
 function Bullet:new(tower, enemy)
     local b = {
         id = tostring(self.uniqueId),
@@ -22,12 +30,17 @@ function Bullet:new(tower, enemy)
     return setmetatable(b, self)
 end
 
+--- возвращает изображение текущего снаряда
+-- @return изображение
 function Bullet:getImage()
     self:turnToTarget()
     local sf = string.format('assets/bullets/%d.png', self.tower.type)
     return Utils.imageFromCache(sf)
 end
 
+
+--- сериализует снаряд
+-- @return таблица {id, position, rotation[,target]}
 function Bullet:serialize()
     local b = {
         id = self.id,
@@ -46,6 +59,8 @@ function Bullet:serialize()
     return b
 end
 
+--- десериализует снаряд
+-- @return инстанс снаряда
 function Bullet:deserialize(de)
     local tower = App.game.towers[de.tower]
 
@@ -61,6 +76,7 @@ function Bullet:deserialize(de)
     return setmetatable(b, self)
 end
 
+--- поворачивает снаряд в сторону противника
 function Bullet:turnToTarget()
     local angle = math.atan2(self.target.position[1] - self.position[1], self.target.position[2] - self.position[2])
     if angle < 0 then
@@ -69,6 +85,9 @@ function Bullet:turnToTarget()
     self.rotation = math.pi/4 - angle
 end
 
+--- жизненный цикл снаряда
+-- @param state состояние игры
+-- @param dt время, прошедшее с прошлого обновления
 function Bullet:update(state, dt)
     local dx = self.target.position[1] - self.position[1]
     local dy = self.target.position[2] - self.position[2]
@@ -85,6 +104,7 @@ function Bullet:update(state, dt)
     end
 end
 
+--- отрисовывает снаряд
 function Bullet:draw()
     local u = App.width/2
     local v = App.height/2 - 6*65
@@ -96,6 +116,8 @@ function Bullet:draw()
     love.graphics.draw(image, bx, by, self.rotation, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
+--- удаляет снаряд со сцены
+-- @param state состояние игры
 function Bullet:destroy(state)
     Utils.removeByKey(state.bullets, self.id)
 end

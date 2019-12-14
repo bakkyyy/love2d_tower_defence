@@ -1,3 +1,7 @@
+---
+-- Класс Игры
+-- @module Game
+
 local json = require 'json'
 
 local Winter = require 'winter'
@@ -18,6 +22,8 @@ GAME_STATE_OVERWRITE = 128
 
 local Game = { state = GAME_STATE_STOPPED }
 
+
+--- ставит игру на паузу
 function Game:pause()
     if self.state == GAME_STATE_PLAYING then
         self.state = GAME_STATE_PAUSED
@@ -30,6 +36,7 @@ function Game:pause()
     end
 end
 
+--- сбрасывает состояние игры к начальному
 function Game:reset()
     self.tiles = Utils.deepCopy(self.map.tiles)
     self.enemies = {}
@@ -49,6 +56,8 @@ function Game:reset()
     self.night = os.time() % 2 == 0
 end
 
+--- сериализует состояние игры
+-- @return таблица
 function Game:serialize()
     local g = {
         mapType = self.mapType,
@@ -86,6 +95,7 @@ function Game:serialize()
     return g
 end
 
+--- сохраняет состояние игры в файл
 function Game:saveToFile()
     local f = love.filesystem.newFile('save.ppg')
     f:open('w')
@@ -93,6 +103,7 @@ function Game:saveToFile()
     f:close()
 end
 
+--- загружает состояние игры из файла
 function Game:loadFromFile()
     local contents = love.filesystem.read('save.ppg')
     if contents == nil then
@@ -139,6 +150,7 @@ function Game:loadFromFile()
     end
 end
 
+--- загружает выбранную карту
 function Game:loadMap()
     if self.mapType == 1 then
         self.map = Summer
@@ -147,6 +159,7 @@ function Game:loadMap()
     end
 end
 
+--- загружает необходимые файлы для сцены игры
 function Game:load()
     self:loadMap()
     self:reset()
@@ -227,6 +240,9 @@ function Game:load()
     table.insert(self.buttons, {image = Utils.imageFromCache('assets/menu/savegame_overwrite.png'), fn = nil })
 end
 
+
+--- жизненный цикл игры
+-- @param dt время, прошедшее с прошлого обновления
 function Game:update(dt)
     if self.state ~= GAME_STATE_PLAYING then
         return
@@ -293,6 +309,9 @@ function Game:update(dt)
     end
 end
 
+--- отрисовывает тайлы
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawTiles(mx, my)
     local color = {1, 1, 1}
     local colorHover = {0.7, 0.7, 0.7}
@@ -358,6 +377,7 @@ function Game:drawTiles(mx, my)
     end
 end
 
+--- сбрасывает состояние тайлов
 function Game:resetTiles()
     for i, row in pairs(self.tiles) do
         for j, tile in pairs(row) do
@@ -366,6 +386,9 @@ function Game:resetTiles()
     end
 end
 
+--- отрисовывает интерфейс игры
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawHUD(mx, my)
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor({1, 1, 1})
@@ -451,6 +474,9 @@ function Game:drawHUD(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
+--- отрисовывает меню паузы
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawPause(mx, my)
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor({1, 1, 1})
@@ -484,16 +510,19 @@ function Game:drawPause(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
+--- отрисовывает победу
 function Game:drawWin()
     local image = Utils.imageFromCache('assets/win.png')
     love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
+--- отрисовывает поражение
 function Game:drawLose()
     local image = Utils.imageFromCache('assets/lose.png')
     love.graphics.draw(image, App.width/2, App.height/2, 0, 1, 1, image:getWidth()/2, image:getHeight()/2)
 end
 
+--- отрисовывает результаты
 function Game:drawResults()
     local r, g, b, a = love.graphics.getColor()
 
@@ -508,6 +537,9 @@ function Game:drawResults()
     love.graphics.setColor({r, g, b, a})
 end
 
+--- отрисовывает настройки
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawSettings(mx, my)
     local r, g, b, a = love.graphics.getColor()
     love.graphics.setColor({1, 1, 1})
@@ -563,6 +595,9 @@ function Game:drawSettings(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
+--- отрисовывает сохранение
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawSaving(mx, my)
     local r, g, b, a = love.graphics.getColor()
 
@@ -602,6 +637,9 @@ function Game:drawSaving(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
+--- отрисовывает перезапись
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Game:drawOverWr(mx, my)
     local r, g, b, a = love.graphics.getColor()
 
@@ -641,7 +679,10 @@ function Game:drawOverWr(mx, my)
     love.graphics.setColor({r, g, b, a})
 end
 
-function Game:drawAll(mx, my)
+--- отрисовывает игру
+-- @param mx координата x мыши
+-- @param my координата y мыши
+function Game:draw(mx, my)
     if self.night then
         love.graphics.draw(nightGradient, 0, 0, 0, App.width, App.height)
     else
@@ -651,10 +692,6 @@ function Game:drawAll(mx, my)
     self:drawTiles(mx, my)
     self:resetTiles()
     self:drawHUD(mx, my)
-end
-
-function Game:draw(mx, my)
-    self:drawAll(mx, my)
 
     if self.state == GAME_STATE_PAUSED then
         self:drawPause(mx, my)

@@ -1,3 +1,7 @@
+---
+-- Класс Меню
+-- @module Menu
+
 local Utils = require 'utils'
 
 MENU_STATE_MAIN = 1
@@ -7,6 +11,7 @@ MENU_STATE_SETTINGS = 12
 
 local Menu = { state = MENU_STATE_MAIN }
 
+--- подгружает ресурсы, необходимые для меню
 function Menu:load()
     logo = Utils.imageFromCache('assets/logo.png')
 
@@ -56,10 +61,15 @@ function Menu:load()
     }
 end
 
+--- жизненный цикл меню
+-- @param dt время, прошедшее с прошлого обновления
 function Menu:update(dt)
 
 end
 
+--- отрисовывает главное меню
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Menu:drawMain(mx, my)
     local cx = App.width / 2
     local cy = App.height / 2
@@ -86,6 +96,9 @@ function Menu:drawMain(mx, my)
     end
 end
 
+--- отрисовывает меню новая игра
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Menu:drawNewGame(mx, my)
     local cx = App.width / 2
     local cy = App.height / 2
@@ -129,6 +142,9 @@ function Menu:drawNewGame(mx, my)
     end
 end
 
+--- отрисовывает меню загрузить игру
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Menu:drawLoadGame(mx, my)
     if Utils.fileExists('save.ppg') then
         music:stop()
@@ -157,6 +173,9 @@ function Menu:drawLoadGame(mx, my)
     end
 end
 
+--- отрисовывает меню настройки
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Menu:drawSettings(mx, my)
     local cx = App.width / 2
     local cy = App.height / 2
@@ -222,6 +241,9 @@ function Menu:drawSettings(mx, my)
     end
 end
 
+--- отрисовывает меню в соответствии с текущим состоянием
+-- @param mx координата x мыши
+-- @param my координата y мыши
 function Menu:draw(mx, my)
     love.graphics.setColor({1, 1, 1})
     love.graphics.draw(dayGradient, 0, 0, 0, App.width, App.height)
